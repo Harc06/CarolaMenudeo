@@ -1,34 +1,51 @@
 <!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Carola | Menudeo</title>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carola Menudeo · Administración</title>
 <style>
-:root{--pink:#f4a7bd;--pink2:#ffd8e3;--ink:#33272c;--muted:#806d74;--cream:#fffaf9;--white:#fff;--line:#f2dce3}
-*{box-sizing:border-box}body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--cream);color:var(--ink)}
-header{background:linear-gradient(135deg,var(--pink),#ef91ae);color:#fff;padding:18px 20px;position:relative;overflow:hidden}
-nav{max-width:1180px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-family:Georgia,serif;font-size:32px;font-weight:700;letter-spacing:.5px}.brand small{font:600 10px Inter,sans-serif;display:block;letter-spacing:3px;text-transform:uppercase}
-.links{display:flex;gap:8px}.links a{color:#fff;text-decoration:none;padding:9px 13px;border-radius:999px;font-size:14px}.links a:hover{background:#ffffff25}
-.hero{max-width:1180px;margin:0 auto;padding:70px 20px 64px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}.eyebrow{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;font-weight:800}.hero h1{font-family:Georgia,serif;font-size:clamp(48px,7vw,82px);line-height:.92;margin:12px 0}.hero p{font-size:18px;line-height:1.6;max-width:560px}.btn{display:inline-block;margin-top:12px;background:#fff;color:#d9688d;text-decoration:none;padding:14px 22px;border-radius:999px;font-weight:800;box-shadow:0 10px 30px #a94e6d30}.visual{height:390px;border-radius:36px;background:linear-gradient(145deg,#fff8,#fff2),radial-gradient(circle at 50% 35%,#fff 0 12%,transparent 13%),linear-gradient(135deg,#f9c7d5,#e884a4);box-shadow:0 30px 60px #9c456336;display:flex;align-items:center;justify-content:center}.visual span{font-family:Georgia,serif;font-size:96px;opacity:.9}
-main{max-width:1180px;margin:auto;padding:54px 20px}.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:22px}.section-head h2{font-family:Georgia,serif;font-size:36px;margin:0}.section-head p{margin:0;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 8px 30px #8c66700d;transition:.2s}.card:hover{transform:translateY(-4px);box-shadow:0 16px 35px #8c66701c}.photo{aspect-ratio:4/5;background:linear-gradient(145deg,#fbe8ee,#f4b2c6);display:flex;align-items:center;justify-content:center;font-size:58px}.info{padding:16px}.tag{font-size:11px;color:#c45b7d;font-weight:800;text-transform:uppercase;letter-spacing:1.3px}.info h3{margin:6px 0 5px}.price{font-weight:800;font-size:18px}.chips{display:flex;gap:6px;margin-top:12px}.chip{width:18px;height:18px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #ddd}.c1{background:#171717}.c2{background:#b98765}.c3{background:#ead1c3}.c4{background:#76523f}
-.banner{margin-top:54px;border-radius:28px;background:var(--pink2);padding:36px;display:flex;justify-content:space-between;align-items:center;gap:20px}.banner h2{font-family:Georgia,serif;margin:0 0 8px;font-size:34px}.banner p{margin:0;color:var(--muted)}footer{text-align:center;color:var(--muted);padding:35px 20px 50px}
-@media(max-width:850px){.links{display:none}.hero{grid-template-columns:1fr;padding-top:46px}.visual{height:280px}.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.hero h1{font-size:52px}.visual{height:230px}.grid{gap:10px}.card{border-radius:18px}.info{padding:12px}.section-head{align-items:start;flex-direction:column;gap:6px}.banner{padding:25px;flex-direction:column;align-items:start}}
-</style>
-</head>
-<body>
-<header>
-<nav><div class="brand">Carola<small>Calzado · Menudeo</small></div><div class="links"><a href="#novedades">Novedades</a><a href="#coleccion">Colección</a><a href="#contacto">Contacto</a></div></nav>
-<div class="hero"><div><div class="eyebrow">Nueva temporada</div><h1>Tu estilo,<br>tu Carola.</h1><p>Una experiencia de compra pensada para menudeo: femenina, limpia y con la esencia rosa de Carola.</p><a class="btn" href="#coleccion">Ver colección</a></div><div class="visual"><span>👢</span></div></div>
-</header>
+:root{--pink:#f2a1ba;--deep:#d86b8e;--soft:#fff0f5;--bg:#fff9fb;--ink:#33282d;--muted:#8b747d;--line:#f0dbe2;--white:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+.top{background:linear-gradient(135deg,#f5aec3,#ec8eab);color:#fff;padding:20px}.topin{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-family:Georgia,serif;font-size:30px;font-weight:700}.logo small{display:block;font:700 9px Inter;letter-spacing:2.4px;text-transform:uppercase;margin-top:2px}.badge{background:#ffffff30;padding:9px 13px;border-radius:999px;font-size:12px;font-weight:700}
+.tabs{max-width:1200px;margin:20px auto 0;padding:0 20px;display:grid;grid-template-columns:1fr 1fr;gap:10px}.tab{border:1px solid var(--line);background:#fff;color:var(--muted);padding:15px;border-radius:16px;font-weight:800;cursor:pointer;font-size:15px}.tab.active{background:var(--deep);color:#fff;border-color:var(--deep);box-shadow:0 8px 24px #d86b8e33}
+main{max-width:1200px;margin:auto;padding:22px 20px 60px}.panel{display:none}.panel.active{display:block}.head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:8px 0 20px}.head h1{font-family:Georgia,serif;font-size:34px;margin:0}.head p{margin:5px 0 0;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}.stat,.card{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 6px 24px #8c66700b}.stat{padding:18px}.stat span{font-size:12px;color:var(--muted);font-weight:700}.stat strong{display:block;font-size:25px;margin-top:5px}
+.card{padding:18px;margin-bottom:16px}.card h2{font-size:17px;margin:0 0 15px}.form{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr auto;gap:9px}.form.client{grid-template-columns:1.3fr 1.2fr 1fr auto}
+input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;font:inherit;outline:none}input:focus,select:focus{border-color:var(--pink);box-shadow:0 0 0 3px #f2a1ba22}.btn{border:0;border-radius:12px;padding:12px 17px;background:var(--deep);color:#fff;font-weight:800;cursor:pointer}
+.toolbar{display:flex;gap:9px;margin-bottom:12px}.search{max-width:330px}.tablewrap{overflow:auto;max-height:520px;border:1px solid var(--line);border-radius:14px}table{width:100%;border-collapse:collapse;min-width:650px;background:#fff}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid #f5e8ec;font-size:14px}th{position:sticky;top:0;background:#fff5f8;color:#9a6073;font-size:11px;text-transform:uppercase;letter-spacing:.8px}tr:last-child td{border-bottom:0}.empty{text-align:center;color:var(--muted);padding:35px!important}
+.subtabs{display:flex;gap:8px;margin-bottom:16px}.subtab{background:#fff;border:1px solid var(--line);padding:10px 16px;border-radius:999px;font-weight:800;color:var(--muted);cursor:pointer}.subtab.active{background:var(--soft);color:var(--deep);border-color:#efbfd0}
+.del{border:0;background:#fff0f4;color:#c85076;border-radius:9px;padding:7px 10px;cursor:pointer}
+@media(max-width:800px){.form,.form.client{grid-template-columns:1fr 1fr}.form .btn,.form.client .btn{grid-column:1/-1}.stats{grid-template-columns:1fr}.head{align-items:start;flex-direction:column}}
+@media(max-width:500px){.top{padding:15px}.badge{display:none}.tabs{margin-top:14px;padding:0 12px}.tab{font-size:13px;padding:13px 8px}main{padding:18px 12px 50px}.form,.form.client{grid-template-columns:1fr}.head h1{font-size:29px}.card{padding:14px}}
+</style></head><body>
+<header class="top"><div class="topin"><div class="logo">Carola<small>Menudeo · Administración</small></div><div class="badge">Panel administrativo</div></div></header>
+<nav class="tabs"><button class="tab active" data-tab="ventas">Registros de ventas</button><button class="tab" data-tab="personas">Clientes y proveedores</button></nav>
 <main>
-<section id="coleccion"><div class="section-head"><div><div class="eyebrow" style="color:#d9688d">Favoritos Carola</div><h2>Explora la colección</h2></div><p>Interfaz inicial para pruebas</p></div>
-<div class="grid">
-<article class="card"><div class="photo">👢</div><div class="info"><div class="tag">Bota</div><h3>Modelo 916</h3><div class="price">$—</div><div class="chips"><i class="chip c2"></i><i class="chip c1"></i></div></div></article>
-<article class="card"><div class="photo">👠</div><div class="info"><div class="tag">Zapatilla</div><h3>Modelo 1141</h3><div class="price">$—</div><div class="chips"><i class="chip c4"></i><i class="chip c3"></i></div></div></article>
-<article class="card"><div class="photo">🥾</div><div class="info"><div class="tag">Botín</div><h3>Modelo 9004</h3><div class="price">$—</div><div class="chips"><i class="chip c2"></i><i class="chip c1"></i></div></div></article>
-<article class="card"><div class="photo">👞</div><div class="info"><div class="tag">Mocasín</div><h3>Modelo 519</h3><div class="price">$—</div><div class="chips"><i class="chip c4"></i><i class="chip c3"></i></div></div></article>
-</div></section>
-<section class="banner" id="contacto"><div><h2>Carola, ahora también para ti.</h2><p>Compra por pieza. Próximamente: carrito, existencias, tallas y pagos.</p></div><a class="btn" href="#">Comprar ahora</a></section>
-</main><footer>© 2026 Carola · Calzado mexicano</footer>
-</body></html>
+<section class="panel active" id="ventas">
+<div class="head"><div><h1>Registros de ventas</h1><p>Captura y consulta las ventas de Carola Menudeo.</p></div></div>
+<div class="stats"><div class="stat"><span>VENTAS REGISTRADAS</span><strong id="nVentas">0</strong></div><div class="stat"><span>PIEZAS VENDIDAS</span><strong id="nPiezas">0</strong></div><div class="stat"><span>TOTAL VENDIDO</span><strong id="nTotal">$0</strong></div></div>
+<div class="card"><h2>Nueva venta</h2><form class="form" id="saleForm"><input type="date" id="sFecha" required><input id="sCliente" placeholder="Cliente" required><input id="sPiezas" type="number" min="1" placeholder="Piezas" required><input id="sTotal" type="number" min="0" step=".01" placeholder="Total $" required><button class="btn">Registrar venta</button></form></div>
+<div class="card"><div class="toolbar"><input class="search" id="saleSearch" placeholder="Buscar venta..."></div><div class="tablewrap"><table><thead><tr><th>Fecha</th><th>Cliente</th><th>Piezas</th><th>Total</th><th></th></tr></thead><tbody id="salesBody"></tbody></table></div></div>
+</section>
+<section class="panel" id="personas">
+<div class="head"><div><h1>Clientes y proveedores</h1><p>Agenda administrativa de menudeo.</p></div></div>
+<div class="subtabs"><button class="subtab active" data-kind="cliente">Clientes</button><button class="subtab" data-kind="proveedor">Proveedores</button></div>
+<div class="card"><h2 id="personTitle">Nuevo cliente</h2><form class="form client" id="personForm"><input id="pNombre" placeholder="Nombre" required><input id="pTelefono" placeholder="Teléfono"><input id="pNota" placeholder="Nota / referencia"><button class="btn">Guardar</button></form></div>
+<div class="card"><div class="toolbar"><input class="search" id="personSearch" placeholder="Buscar..."></div><div class="tablewrap"><table><thead><tr><th>Nombre</th><th>Teléfono</th><th>Nota</th><th></th></tr></thead><tbody id="peopleBody"></tbody></table></div></div>
+</section>
+</main>
+<script>
+const $=s=>document.querySelector(s), money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(n);
+let sales=JSON.parse(localStorage.getItem('cm_sales')||'[]'), people=JSON.parse(localStorage.getItem('cm_people')||'[]'),kind='cliente';
+$('#sFecha').value=new Date().toISOString().slice(0,10);
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#'+b.dataset.tab).classList.add('active')});
+document.querySelectorAll('.subtab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.subtab').forEach(x=>x.classList.remove('active'));b.classList.add('active');kind=b.dataset.kind;$('#personTitle').textContent=kind==='cliente'?'Nuevo cliente':'Nuevo proveedor';renderPeople()});
+$('#saleForm').onsubmit=e=>{e.preventDefault();sales.unshift({id:Date.now(),fecha:$('#sFecha').value,cliente:$('#sCliente').value.trim(),piezas:+$('#sPiezas').value,total:+$('#sTotal').value});saveSales();e.target.reset();$('#sFecha').value=new Date().toISOString().slice(0,10)};
+$('#personForm').onsubmit=e=>{e.preventDefault();people.unshift({id:Date.now(),kind,nombre:$('#pNombre').value.trim(),telefono:$('#pTelefono').value.trim(),nota:$('#pNota').value.trim()});localStorage.setItem('cm_people',JSON.stringify(people));e.target.reset();renderPeople()};
+$('#saleSearch').oninput=renderSales;$('#personSearch').oninput=renderPeople;
+function saveSales(){localStorage.setItem('cm_sales',JSON.stringify(sales));renderSales()}
+function renderSales(){let q=$('#saleSearch').value.toLowerCase(),a=sales.filter(x=>(x.fecha+' '+x.cliente).toLowerCase().includes(q));$('#nVentas').textContent=sales.length;$('#nPiezas').textContent=sales.reduce((a,x)=>a+x.piezas,0);$('#nTotal').textContent=money(sales.reduce((a,x)=>a+x.total,0));$('#salesBody').innerHTML=a.length?a.map(x=>'<tr><td>'+x.fecha+'</td><td>'+esc(x.cliente)+'</td><td>'+x.piezas+'</td><td>'+money(x.total)+'</td><td><button class="del" onclick="delSale('+x.id+')">Eliminar</button></td></tr>').join(''):'<tr><td class="empty" colspan="5">Todavía no hay ventas registradas.</td></tr>'}
+function renderPeople(){let q=$('#personSearch').value.toLowerCase(),a=people.filter(x=>x.kind===kind&&(x.nombre+' '+x.telefono+' '+x.nota).toLowerCase().includes(q));$('#peopleBody').innerHTML=a.length?a.map(x=>'<tr><td><b>'+esc(x.nombre)+'</b></td><td>'+esc(x.telefono||'—')+'</td><td>'+esc(x.nota||'—')+'</td><td><button class="del" onclick="delPerson('+x.id+')">Eliminar</button></td></tr>').join(''):'<tr><td class="empty" colspan="4">Todavía no hay '+(kind==='cliente'?'clientes':'proveedores')+' registrados.</td></tr>'}
+function delSale(id){if(confirm('¿Eliminar esta venta?')){sales=sales.filter(x=>x.id!==id);saveSales()}}function delPerson(id){if(confirm('¿Eliminar este registro?')){people=people.filter(x=>x.id!==id);localStorage.setItem('cm_people',JSON.stringify(people));renderPeople()}}
+function esc(v){return String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+renderSales();renderPeople();
+</script></body></html>
