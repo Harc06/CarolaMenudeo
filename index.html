@@ -16,8 +16,10 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
 @media(max-width:600px){.sizes-input{grid-template-columns:repeat(4,1fr);gap:6px}.size-input input{padding:10px 4px}}@media(max-width:500px){.sale-entry{grid-template-columns:1fr}.top{padding:15px}.badge{display:none}.tabs{margin-top:14px;padding:0 12px;gap:6px}.tab{font-size:11px;padding:12px 5px}main{width:94%;margin:18px auto 22px;padding:0}.form,.form.client,.form.catalog{grid-template-columns:1fr}.head h1{font-size:29px}.card{padding:14px}.sizes{grid-template-columns:repeat(3,1fr)}}
 
 footer{padding:18px 20px 24px;text-align:center;color:#aaa;font-size:13px}
-html,body{margin:0;padding:0;width:100%;overflow-x:hidden}
-body{height:auto;min-height:0}
+html{margin:0;padding:0;width:100%;height:100%;overflow:hidden}
+body{margin:0;padding:0;width:100%;height:100dvh;min-height:0;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:none}
+main{min-height:0!important}
+footer{margin:0!important}
 .panel{display:none}.panel.active{display:block}
 </style></head><body>
 <header class="top"><div class="topin"><div class="logo">Carola<small>Menudeo · Administración</small></div><div class="badge">Panel administrativo</div></div></header><div class="refreshbar"><button class="refresh-btn" type="button" onclick="refreshRecords()">↻ Actualizar</button></div>
@@ -95,25 +97,4 @@ function returnSale(id){let x=sales.find(y=>y.id===id);if(!x)return;if(!confirm(
 function delSale(id){let x=sales.find(y=>y.id===id);if(!x)return;if(confirm('¿Eliminar esta venta? El producto regresará al inventario.')){stockBack(x);sales=sales.filter(y=>y.id!==id);localStorage.setItem('cm_sales',JSON.stringify(sales));renderSales()}}function delPerson(id){if(confirm('¿Eliminar este registro?')){people=people.filter(x=>x.id!==id);localStorage.setItem('cm_people',JSON.stringify(people));renderPeople()}}function delModel(id){if(confirm('¿Eliminar este modelo?')){catalog=catalog.filter(x=>x.id!==id);saveCatalog()}}
 renderSales();renderHistory();renderPeople();renderCatalog();renderFinance();loadModels();
 </script>
-<script>
-(()=>{
- const footer=document.querySelector('footer');
- const main=document.querySelector('main');
- if(!footer||!main)return;
- const sync=()=>{
-   document.body.style.paddingBottom='0';
-   document.documentElement.style.paddingBottom='0';
-   const bottom=Math.ceil(footer.getBoundingClientRect().bottom+window.scrollY);
-   const viewport=window.innerHeight;
-   const maxScroll=Math.max(0,bottom-viewport);
-   if(window.scrollY>maxScroll+2) window.scrollTo(0,maxScroll);
- };
- let ticking=false;
- const clamp=()=>{if(ticking)return;ticking=true;requestAnimationFrame(()=>{sync();ticking=false})};
- window.addEventListener('scroll',clamp,{passive:true});
- window.addEventListener('resize',clamp,{passive:true});
- new MutationObserver(clamp).observe(main,{childList:true,subtree:true,attributes:true});
- window.addEventListener('load',clamp);
- setTimeout(clamp,100);
-})();
-</script></body></html>
+</body></html>
