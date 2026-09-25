@@ -94,4 +94,26 @@ function changeSale(id){let x=sales.find(y=>y.id===id);if(!x)return;if(!confirm(
 function returnSale(id){let x=sales.find(y=>y.id===id);if(!x)return;if(!confirm('¿Registrar devolución y regresar el producto al inventario?'))return;stockBack(x);sales=sales.filter(y=>y.id!==id);let returns=JSON.parse(localStorage.getItem('cm_returns')||'[]');returns.unshift({...x,devolucionId:Date.now(),montoDevuelto:+x.precio||0,fechaDevolucion:new Date().toISOString().slice(0,10)});localStorage.setItem('cm_returns',JSON.stringify(returns));financeFromSale(x,-1,'Devolución');history.unshift({id:Date.now(),fecha:new Date().toISOString().slice(0,10),tipo:'Devolución',cliente:x.cliente,original:x.modelo+' · '+x.color+' · Talla '+x.talla,nuevo:'—',monto:+x.precio||0});saveHistory();localStorage.setItem('cm_sales',JSON.stringify(sales));renderSales()}
 function delSale(id){let x=sales.find(y=>y.id===id);if(!x)return;if(confirm('¿Eliminar esta venta? El producto regresará al inventario.')){stockBack(x);sales=sales.filter(y=>y.id!==id);localStorage.setItem('cm_sales',JSON.stringify(sales));renderSales()}}function delPerson(id){if(confirm('¿Eliminar este registro?')){people=people.filter(x=>x.id!==id);localStorage.setItem('cm_people',JSON.stringify(people));renderPeople()}}function delModel(id){if(confirm('¿Eliminar este modelo?')){catalog=catalog.filter(x=>x.id!==id);saveCatalog()}}
 renderSales();renderHistory();renderPeople();renderCatalog();renderFinance();loadModels();
+</script>
+<script>
+(()=>{
+ const footer=document.querySelector('footer');
+ const main=document.querySelector('main');
+ if(!footer||!main)return;
+ const sync=()=>{
+   document.body.style.paddingBottom='0';
+   document.documentElement.style.paddingBottom='0';
+   const bottom=Math.ceil(footer.getBoundingClientRect().bottom+window.scrollY);
+   const viewport=window.innerHeight;
+   const maxScroll=Math.max(0,bottom-viewport);
+   if(window.scrollY>maxScroll+2) window.scrollTo(0,maxScroll);
+ };
+ let ticking=false;
+ const clamp=()=>{if(ticking)return;ticking=true;requestAnimationFrame(()=>{sync();ticking=false})};
+ window.addEventListener('scroll',clamp,{passive:true});
+ window.addEventListener('resize',clamp,{passive:true});
+ new MutationObserver(clamp).observe(main,{childList:true,subtree:true,attributes:true});
+ window.addEventListener('load',clamp);
+ setTimeout(clamp,100);
+})();
 </script></body></html>
