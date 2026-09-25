@@ -15,7 +15,7 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
 @media(max-width:800px){.sale-entry{grid-template-columns:1fr 1fr}.form,.form.client,.form.catalog{grid-template-columns:1fr 1fr}.colors{grid-template-columns:1fr}.form .btn{grid-column:1/-1}.stats{grid-template-columns:1fr}.models{grid-template-columns:1fr}.head{align-items:start;flex-direction:column}}
 @media(max-width:600px){.sizes-input{grid-template-columns:repeat(4,1fr);gap:6px}.size-input input{padding:10px 4px}}@media(max-width:500px){.sale-entry{grid-template-columns:1fr}.top{padding:15px}.badge{display:none}.tabs{margin-top:14px;padding:0 12px;gap:6px}.tab{font-size:11px;padding:12px 5px}main{padding:18px 12px 12px}.form,.form.client,.form.catalog{grid-template-columns:1fr}.head h1{font-size:29px}.card{padding:14px}.sizes{grid-template-columns:repeat(3,1fr)}}
 
-html,body{margin:0;padding:0;width:100%;min-height:100%;overflow-x:hidden}
+html,body{margin:0;padding:0;width:100%;height:auto!important;min-height:0!important;overflow-x:hidden}
 body{min-height:0!important;height:auto!important}
 main{min-height:0!important;height:auto!important}
 .panel:not(.active){display:none!important}
@@ -64,6 +64,8 @@ let saleStatus='pagado',exchangeId=null;
 function activateTab(id){let tab=document.querySelector('.tab[data-tab="'+id+'"]'),panel=$('#'+id);if(!tab||!panel)return;document.querySelectorAll('.tab,.panel').forEach(x=>x.classList.remove('active'));tab.classList.add('active');panel.classList.add('active');localStorage.setItem('cm_active_tab',id);if(id==='finanzas')setTimeout(renderFinance,0)}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>activateTab(b.dataset.tab));
 let savedTab=localStorage.getItem('cm_active_tab');if(savedTab)activateTab(savedTab);
+function trimPageHeight(){document.documentElement.style.height='auto';document.body.style.height='auto';document.documentElement.style.minHeight='0';document.body.style.minHeight='0'}
+window.addEventListener('load',trimPageHeight);window.addEventListener('resize',trimPageHeight);setTimeout(trimPageHeight,50);
 document.querySelectorAll('.subtab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.subtab').forEach(x=>x.classList.remove('active'));b.classList.add('active');kind=b.dataset.kind;$('#personTitle').textContent=kind==='cliente'?'Nuevo cliente':'Nuevo proveedor';renderPeople()});
 function loadModels(){let ms=[...new Set(catalog.map(x=>x.modelo))].sort((a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true}));$('#sModelo').innerHTML='<option value="">Seleccionar modelo</option>'+ms.map(x=>'<option>'+esc(x)+'</option>').join('')}
 function loadColors(){let m=$('#sModelo').value,cs=catalog.filter(x=>x.modelo===m);$('#sColor').disabled=!m;$('#sColor').innerHTML='<option value="">Seleccionar color</option>'+cs.map(x=>'<option value="'+x.id+'">'+esc(x.color)+'</option>').join('');$('#sTalla').innerHTML='<option value="">Seleccionar talla</option>';$('#sTalla').disabled=true}
