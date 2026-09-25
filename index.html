@@ -54,7 +54,7 @@ footer{margin:0!important}
 </main><footer>Panel interno de Carola Menudeo</footer>
 <script>
 const $=s=>document.querySelector(s),money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(n),esc=v=>String(v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-const sb=window.supabase.createClient('https://gfkjdpuhbxfwajbkzfap.supabase.co','sb_publishable_Dbg1YhOyxOxgxcvwr9fWtg_mI4iwUw7');
+const sb=window.supabase.createClient('https://hnivrzcjxjofgzgopmbv.supabase.co','sb_publishable_5_IdToHZp3qyPv4aJehepA_VsDI6Vgl');
 async function loadCatalogFromSupabase(){try{let {data,error}=await sb.from('menudeo_inventario').select('*').order('modelo').order('color');if(error)throw error;catalog=(data||[]).map(x=>({id:x.id,modelo:x.modelo,categoria:x.categoria,color:x.color,punto:x.proveedor||'',precioCompra:+x.precio_compra||0,precioVenta:+x.precio_venta||0,tallas:{'3':x.talla_3||0,'4':x.talla_4||0,'5':x.talla_5||0,'6':x.talla_6||0}}));localStorage.setItem('cm_catalog',JSON.stringify(catalog));renderCatalog();loadModels()}catch(e){console.error('Supabase catálogo:',e)}}
 async function upsertCatalogRow(x){let row={modelo:x.modelo,categoria:x.categoria,color:x.color,proveedor:x.punto||null,precio_compra:+x.precioCompra||0,precio_venta:+x.precioVenta||0,talla_3:+x.tallas['3']||0,talla_4:+x.tallas['4']||0,talla_5:+x.tallas['5']||0,talla_6:+x.tallas['6']||0};let {error}=await sb.from('menudeo_inventario').upsert(row,{onConflict:'modelo,color'});if(error)throw error}
 async function deleteCatalogRow(x){let {error}=await sb.from('menudeo_inventario').delete().eq('modelo',x.modelo).eq('color',x.color);if(error)throw error}
