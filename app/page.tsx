@@ -20,7 +20,10 @@ function TabIcon({id}:{id:Tab}){
 export default function Home(){
  const [tab,setTab]=useState<Tab>('inicio');
  const [extra,setExtra]=useState<Extra|null>(null);
- const go=(next:Tab)=>{setTab(next);setExtra(null);window.scrollTo({top:0,behavior:'smooth'})};
+ const [saleOptionsOpen,setSaleOptionsOpen]=useState(false);
+ const [saleFlow,setSaleFlow]=useState<'Realizar venta'|'Cotización libre'|null>(null);
+ const go=(next:Tab)=>{setTab(next);setExtra(null);setSaleOptionsOpen(false);setSaleFlow(null);window.scrollTo({top:0,behavior:'smooth'})};
+ const chooseSale=(option:'Realizar venta'|'Cotización libre')=>{setSaleOptionsOpen(false);setSaleFlow(option);setTab('ventas');setExtra(null);window.scrollTo({top:0,behavior:'smooth'})};
  const active=tabs.find(t=>t.id===tab)!;
  return <main className="app-shell">
   <div className="app-body">
@@ -33,7 +36,7 @@ export default function Home(){
        <h2>Tu negocio hoy</h2>
        <div className="today-top"><div><strong className="today-amount">—</strong><span>Ventas hoy</span></div><div className="today-compare">vs ayer <span>Sin datos</span></div></div>
        <div className="today-bottom"><div><strong>—</strong><span>Balance</span></div><div className="expense"><strong>—</strong><span>Gastos hoy</span></div></div>
-       <button className="sale-action" onClick={()=>go('ventas')}><TabIcon id="ventas"/> Registrar venta</button>
+       <button className="sale-action" onClick={()=>setSaleOptionsOpen(true)}><TabIcon id="ventas"/> Registrar venta</button>
        <p className="today-footnote">Los importes aparecerán cuando configuremos el registro de ventas y gastos.</p>
      </section>
      <h2 className="section-heading">Descubre todo lo que puedes hacer</h2>
@@ -41,10 +44,11 @@ export default function Home(){
      <div className="scroll-hint">Desliza para ver más <span>→</span></div>
      <section className="insights"><h2>Estadísticas</h2><p>Resumen de tu negocio</p><div className="insight-grid"><div><span>Producto estrella del mes</span><strong>Sin registros</strong></div><div><span>Ganancias del mes</span><strong>Sin registros</strong></div></div><button onClick={()=>{setExtra('Estadísticas');window.scrollTo({top:0,behavior:'smooth'})}}>Ver todo →</button></section>
    </section>:<section className="section-screen" key={extra||tab}>
-      <div className="eyebrow">CAROLA MENUDEO</div><h1>{extra||active.label}</h1>
-      <div className="section-placeholder"><div className="placeholder-icon"><TabIcon id={tab}/></div><h2>Apartado de {(extra||active.label).toLowerCase()}</h2><p>Este espacio ya está creado. Aquí agregaremos las funciones que definamos para {(extra||active.label).toLowerCase()}.</p><span className="pending-label">Pendiente de configurar</span></div>
+      <div className="eyebrow">CAROLA MENUDEO</div><h1>{saleFlow||extra||active.label}</h1>
+      <div className="section-placeholder"><div className="placeholder-icon"><TabIcon id={tab}/></div><h2>{saleFlow||`Apartado de ${(extra||active.label).toLowerCase()}`}</h2><p>{saleFlow?'La opción ya está preparada. Aquí configuraremos el formulario y los datos de esta operación.':`Este espacio ya está creado. Aquí agregaremos las funciones que definamos para ${(extra||active.label).toLowerCase()}.`}</p><span className="pending-label">Pendiente de configurar</span></div>
    </section>}
   </div>
+  {saleOptionsOpen&&<div className="sale-modal-overlay" onClick={()=>setSaleOptionsOpen(false)}><section className="sale-sheet" role="dialog" aria-modal="true" aria-labelledby="sale-sheet-title" onClick={e=>e.stopPropagation()}><div className="sale-sheet-head"><h2 id="sale-sheet-title">Nueva venta</h2><button type="button" className="sale-sheet-close" aria-label="Cerrar opciones de venta" onClick={()=>setSaleOptionsOpen(false)}>×</button></div><p>Selecciona qué quieres hacer.</p><div className="sale-sheet-options"><button type="button" onClick={()=>chooseSale('Realizar venta')}><span className="sale-option-emoji">🛍️</span><span className="sale-option-copy"><strong>Realizar venta</strong><small>Registra una venta de productos.</small></span><span className="sale-option-arrow">›</span></button><button type="button" onClick={()=>chooseSale('Cotización libre')}><span className="sale-option-emoji">📝</span><span className="sale-option-copy"><strong>Cotización libre</strong><small>Prepara una cotización sin seleccionar productos del inventario.</small></span><span className="sale-option-arrow">›</span></button></div></section></div>}
   <nav className="bottom-nav" aria-label="Navegación principal">{tabs.map(t=><button key={t.id} type="button" aria-current={tab===t.id?'page':undefined} className={'nav-tab'+(tab===t.id?' selected':'')} onClick={()=>go(t.id)}><TabIcon id={t.id}/><span>{t.label}</span></button>)}</nav>
  </main>;
 }
