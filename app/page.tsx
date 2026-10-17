@@ -2,6 +2,8 @@
 import { useState } from 'react';
 
 type Tab = 'inicio' | 'ventas' | 'compras' | 'inventario';
+type Extra = 'Catálogo virtual' | 'Deudas' | 'Cotizaciones' | 'Estadísticas' | 'Clientes' | 'Proveedores' | 'Empleados';
+const shortcuts: {name:Extra; symbol:string}[] = [{name:'Catálogo virtual',symbol:'🛍️'},{name:'Deudas',symbol:'💸'},{name:'Cotizaciones',symbol:'📝'},{name:'Estadísticas',symbol:'📊'},{name:'Clientes',symbol:'👤'},{name:'Proveedores',symbol:'🚚'},{name:'Empleados',symbol:'👥'}];
 const tabs: {id:Tab; label:string}[] = [
  {id:'inicio',label:'Inicio'},
  {id:'ventas',label:'Ventas'},
@@ -17,6 +19,8 @@ function TabIcon({id}:{id:Tab}){
 }
 export default function Home(){
  const [tab,setTab]=useState<Tab>('inicio');
+ const [extra,setExtra]=useState<Extra|null>(null);
+ const go=(next:Tab)=>{setTab(next);setExtra(null);window.scrollTo({top:0,behavior:'smooth'})};
  const active=tabs.find(t=>t.id===tab)!;
  return <main className="app-shell">
   <div className="app-body">
@@ -24,16 +28,23 @@ export default function Home(){
     <div className="identity"><div className="identity-mark">C</div><div><span className="identity-name">Carola</span><span className="identity-sub">Menudeo</span></div></div>
     <span className="header-pill">Administración</span>
    </header>
-   {tab==='inicio'?<section className="home-screen">
-     <div className="welcome"><span className="eyebrow">TU ESPACIO DE TRABAJO</span><h1>Hola, bienvenido a Carola.</h1><p>Todo tu negocio, en un solo lugar.</p></div>
-     <section className="home-card"><div className="home-card-symbol">✦</div><span className="eyebrow">CAROLA MENUDEO</span><h2>Tu negocio, más organizado.</h2><p>Estamos preparando cada apartado para que administres tus ventas, compras e inventario de manera sencilla.</p></section>
-     <h2 className="section-heading">Tus apartados</h2>
-     <div className="quick-grid">{tabs.filter(t=>t.id!=='inicio').map(t=><button className="quick-card" key={t.id} onClick={()=>setTab(t.id)}><span className="quick-icon"><TabIcon id={t.id}/></span><span>{t.label}</span><span className="quick-arrow">›</span></button>)}</div>
-   </section>:<section className="section-screen" key={tab}>
-      <div className="eyebrow">CAROLA MENUDEO</div><h1>{active.label}</h1>
-      <div className="section-placeholder"><div className="placeholder-icon"><TabIcon id={tab}/></div><h2>Apartado de {active.label.toLowerCase()}</h2><p>Este espacio ya está creado. Aquí agregaremos las funciones que definamos para {active.label.toLowerCase()}.</p><span className="pending-label">Pendiente de configurar</span></div>
+   {tab==='inicio'&&!extra?<section className="home-screen">
+     <section className="today-card">
+       <h2>Tu negocio hoy</h2>
+       <div className="today-top"><div><strong className="today-amount">—</strong><span>Ventas hoy</span></div><div className="today-compare">vs ayer <span>Sin datos</span></div></div>
+       <div className="today-bottom"><div><strong>—</strong><span>Balance</span></div><div className="expense"><strong>—</strong><span>Gastos hoy</span></div></div>
+       <button className="sale-action" onClick={()=>go('ventas')}><TabIcon id="ventas"/> Registrar venta</button>
+       <p className="today-footnote">Los importes aparecerán cuando configuremos el registro de ventas y gastos.</p>
+     </section>
+     <h2 className="section-heading">Descubre todo lo que puedes hacer</h2>
+     <div className="shortcut-strip" aria-label="Accesos rápidos">{shortcuts.map(x=><button type="button" key={x.name} className="shortcut-card" onClick={()=>{setExtra(x.name);window.scrollTo({top:0,behavior:'smooth'})}}><span className="shortcut-emoji" aria-hidden="true">{x.symbol}</span><span>{x.name}</span></button>)}</div>
+     <div className="scroll-hint">Desliza para ver más <span>→</span></div>
+     <section className="insights"><h2>Estadísticas</h2><p>Resumen de tu negocio</p><div className="insight-grid"><div><span>Producto estrella del mes</span><strong>Sin registros</strong></div><div><span>Ganancias del mes</span><strong>Sin registros</strong></div></div><button onClick={()=>{setExtra('Estadísticas');window.scrollTo({top:0,behavior:'smooth'})}}>Ver todo →</button></section>
+   </section>:<section className="section-screen" key={extra||tab}>
+      <div className="eyebrow">CAROLA MENUDEO</div><h1>{extra||active.label}</h1>
+      <div className="section-placeholder"><div className="placeholder-icon"><TabIcon id={tab}/></div><h2>Apartado de {(extra||active.label).toLowerCase()}</h2><p>Este espacio ya está creado. Aquí agregaremos las funciones que definamos para {(extra||active.label).toLowerCase()}.</p><span className="pending-label">Pendiente de configurar</span></div>
    </section>}
   </div>
-  <nav className="bottom-nav" aria-label="Navegación principal">{tabs.map(t=><button key={t.id} type="button" aria-current={tab===t.id?'page':undefined} className={'nav-tab'+(tab===t.id?' selected':'')} onClick={()=>setTab(t.id)}><TabIcon id={t.id}/><span>{t.label}</span></button>)}</nav>
+  <nav className="bottom-nav" aria-label="Navegación principal">{tabs.map(t=><button key={t.id} type="button" aria-current={tab===t.id?'page':undefined} className={'nav-tab'+(tab===t.id?' selected':'')} onClick={()=>go(t.id)}><TabIcon id={t.id}/><span>{t.label}</span></button>)}</nav>
  </main>;
 }
