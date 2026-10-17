@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import NoteSheet, { type NoteKind } from './components/NoteSheet';
 
 type Tab = 'inicio' | 'ventas' | 'compras' | 'inventario';
 type Extra = 'Catálogo virtual' | 'Deudas' | 'Cotizaciones' | 'Estadísticas' | 'Clientes' | 'Proveedores' | 'Empleados';
@@ -21,9 +22,9 @@ export default function Home(){
  const [tab,setTab]=useState<Tab>('inicio');
  const [extra,setExtra]=useState<Extra|null>(null);
  const [saleOptionsOpen,setSaleOptionsOpen]=useState(false);
- const [saleFlow,setSaleFlow]=useState<'Realizar venta'|'Cotización libre'|null>(null);
+ const [saleFlow,setSaleFlow]=useState<NoteKind|null>(null);
  const go=(next:Tab)=>{setTab(next);setExtra(null);setSaleOptionsOpen(false);setSaleFlow(null);window.scrollTo({top:0,behavior:'smooth'})};
- const chooseSale=(option:'Realizar venta'|'Cotización libre')=>{setSaleOptionsOpen(false);setSaleFlow(option);setTab('ventas');setExtra(null);window.scrollTo({top:0,behavior:'smooth'})};
+ const chooseSale=(option:NoteKind)=>{setSaleOptionsOpen(false);setSaleFlow(option)};
  const active=tabs.find(t=>t.id===tab)!;
  return <main className="app-shell">
   <div className="app-body">
@@ -49,6 +50,7 @@ export default function Home(){
    </section>}
   </div>
   {saleOptionsOpen&&<div className="sale-modal-overlay" onClick={()=>setSaleOptionsOpen(false)}><section className="sale-sheet" role="dialog" aria-modal="true" aria-labelledby="sale-sheet-title" onClick={e=>e.stopPropagation()}><div className="sale-sheet-head"><h2 id="sale-sheet-title">Nueva venta</h2><button type="button" className="sale-sheet-close" aria-label="Cerrar opciones de venta" onClick={()=>setSaleOptionsOpen(false)}>×</button></div><p>Selecciona qué quieres hacer.</p><div className="sale-sheet-options"><button type="button" onClick={()=>chooseSale('Realizar venta')}><span className="sale-option-emoji">🛍️</span><span className="sale-option-copy"><strong>Realizar venta</strong><small>Registra una venta de productos.</small></span><span className="sale-option-arrow">›</span></button><button type="button" onClick={()=>chooseSale('Cotización libre')}><span className="sale-option-emoji">📝</span><span className="sale-option-copy"><strong>Cotización libre</strong><small>Prepara una cotización sin seleccionar productos del inventario.</small></span><span className="sale-option-arrow">›</span></button></div></section></div>}
+  {saleFlow&&<NoteSheet kind={saleFlow} onClose={()=>setSaleFlow(null)}/>}
   <nav className="bottom-nav" aria-label="Navegación principal">{tabs.map(t=><button key={t.id} type="button" aria-current={tab===t.id?'page':undefined} className={'nav-tab'+(tab===t.id?' selected':'')} onClick={()=>go(t.id)}><TabIcon id={t.id}/><span>{t.label}</span></button>)}</nav>
  </main>;
 }
