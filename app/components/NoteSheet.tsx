@@ -1,0 +1,32 @@
+'use client';
+import { useMemo, useState } from 'react';
+
+export type NoteKind = 'Realizar venta' | 'Cotización libre';
+type Line = { id:number; cantidad:string; modelo:string; color:string; talla:string; precio:string };
+const empty=(id:number):Line=>({id,cantidad:'1',modelo:'',color:'',talla:'',precio:''});
+const mxn=(n:number)=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(n);
+const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
+export default function NoteSheet({kind,onClose}:{kind:NoteKind;onClose:()=>void}){
+ const [name,setName]=useState(''),[phone,setPhone]=useState(''),[date,setDate]=useState(today),[detail,setDetail]=useState('');
+ const [lines,setLines]=useState<Line[]>([empty(1)]),[preview,setPreview]=useState(false),[error,setError]=useState('');
+ const total=useMemo(()=>lines.reduce((sum,x)=>sum+(Number(x.cantidad)||0)*(Number(x.precio)||0),0),[lines]);
+ const update=(id:number,key:keyof Omit<Line,'id'>,value:string)=>setLines(current=>current.map(x=>x.id===id?{...x,[key]:value}:x));
+ const add=()=>setLines(current=>[...current,empty(Math.max(...current.map(x=>x.id))+1)]);
+ const valid=()=>{if(!name.trim()||!date){setError('Escribe el nombre del cliente y la fecha.');return false}if(!lines.length||lines.some(x=>!x.modelo.trim()||!x.color.trim()||!x.talla.trim()||!x.cantidad||!x.precio||!Number.isInteger(Number(x.cantidad))||Number(x.cantidad)<=0||!Number.isFinite(Number(x.precio))||Number(x.precio)<0)){setError('Completa modelo, color, talla, cantidad y precio válido en todos los renglones.');return false}setError('');return true};
+ const text=()=>[kind==='Cotización libre'?'COTIZACIÓN · CAROLA MENUDEO':'NOTA DE VENTA · CAROLA MENUDEO',`Cliente: ${name.trim()}`,phone.trim()?`Teléfono: ${phone.trim()}`:'',`Fecha: ${date.split('-').reverse().join('/')}`,'',...lines.map(x=>`${x.cantidad} × ${x.modelo} · ${x.color} · Talla ${x.talla} · ${mxn(Number(x.precio))} c/u = ${mxn(Number(x.cantidad)*Number(x.precio))}`),'',`TOTAL: ${mxn(total)}`,kind==='Cotización libre'?'Cotización informativa. No es un cobro ni reserva de inventario.':'Borrador de venta. Pendiente de registro.'].filter(Boolean).join('\n');
+ const share=()=>{if(!valid())return;window.open(`https://wa.me/?text=${encodeURIComponent(text())}`,'_blank','noopener,noreferrer')};
+ return <div className="note-overlay" onClick={onClose}>
+ <section className="note-sheet" role="dialog" aria-modal="true" aria-labelledby="note-title" onClick={e=>e.stopPropagation()}>
+ <div className="note-sheet-head"><div><span className="eyebrow">CAROLA MENUDEO</span><h2 id="note-title">{kind}</h2></div><button type="button" className="note-close" onClick={onClose} aria-label="Cerrar nota">×</button></div>
+ {!preview?<div className="note-fields">
+ <div className="note-two"><label>Nombre del cliente <input value={name} onChange={e=>setName(e.target.value)} placeholder="Nombre completo" autoComplete="name"/></label><label>Teléfono <input type="tel" value={phone} onChange={e=>setPhone(e.target.value)} placeholder="Número de contacto" autoComplete="tel"/></label></div>
+ <label>Fecha <input type="date" value={date} onChange={e=>setDate(e.target.value)}/></label>
+ <label>Detalle de venta <textarea value={detail} onChange={e=>setDetail(e.target.value)} rows={2} placeholder="Observaciones internas (no se mostrarán al cliente)"/></label><p className="internal-note">Este detalle es privado y no se incluye en la nota final.</p>
+ <h3>Productos</h3>
+ {lines.map((x,i)=><div className="note-line" key={x.id}><div className="note-line-head"><strong>Renglón {i+1}</strong>{lines.length>1&&<button type="button" onClick={()=>setLines(current=>current.filter(y=>y.id!==x.id))}>Eliminar</button>}</div><div className="note-line-grid"><label>Cantidad<input type="number" min="1" step="1" inputMode="numeric" value={x.cantidad} onChange={e=>update(x.id,'cantidad',e.target.value)}/></label><label>Modelo<input value={x.modelo} onChange={e=>update(x.id,'modelo',e.target.value)}/></label><label>Color<input value={x.color} onChange={e=>update(x.id,'color',e.target.value)}/></label><label>Talla<input value={x.talla} onChange={e=>update(x.id,'talla',e.target.value)}/></label><label>Precio unitario<input type="number" min="0" step="0.01" inputMode="decimal" value={x.precio} onChange={e=>update(x.id,'precio',e.target.value)}/></label><div className="note-subtotal"><span>Subtotal</span><strong>{mxn((Number(x.cantidad)||0)*(Number(x.precio)||0))}</strong></div></div></div>)}
+ <button type="button" className="note-add" onClick={add}>+ Agregar otro producto</button>
+ </div>:<div className="note-preview"><div className="note-preview-title"><strong>CAROLA</strong><span>MENUDEO</span></div><h3>{kind==='Cotización libre'?'COTIZACIÓN':'NOTA DE VENTA'}</h3><p><b>Cliente:</b> {name}</p>{phone&&<p><b>Teléfono:</b> {phone}</p>}<p><b>Fecha:</b> {date.split('-').reverse().join('/')}</p><div className="note-preview-table"><div className="note-preview-row heading"><span>Cant.</span><span>Modelo / Color / Talla</span><span>Importe</span></div>{lines.map(x=><div className="note-preview-row" key={x.id}><span>{x.cantidad}</span><span>{x.modelo} · {x.color} · T{ x.talla }<small>{mxn(Number(x.precio))} c/u</small></span><span>{mxn(Number(x.cantidad)*Number(x.precio))}</span></div>)}</div><div className="note-preview-total">Total <strong>{mxn(total)}</strong></div>{kind==='Cotización libre'&&<p className="note-disclaimer">Cotización informativa. No representa un cobro ni reserva de inventario.</p>}{kind==='Realizar venta'&&<p className="note-disclaimer">Borrador de venta. Pendiente de registro.</p>}</div>}
+ {error&&<p className="note-error" role="alert">{error}</p>}
+ <div className="note-footer"><div className="note-total"><span>Total de nota</span><strong>{mxn(total)}</strong></div><div className="note-actions"><button type="button" className="note-secondary" onClick={()=>{setPreview(!preview);setError('')}}>{preview?'Editar nota':'Vista previa'}</button><button type="button" className="note-primary" onClick={()=>{if(!preview){if(valid())setPreview(true)}else share()}}>{preview?'Enviar por WhatsApp':'Continuar'}</button></div><p className="note-status">{kind==='Cotización libre'?'No se cobrará ni se descontará inventario.':'Por seguridad, esta versión prepara la nota pero todavía no registra el cobro ni descuenta existencias.'}</p></div>
+ </section></div>
+}
