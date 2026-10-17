@@ -1,24 +1,39 @@
 'use client';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { getSupabaseClient } from '@/lib/supabase/client';
+import { useState } from 'react';
 
-const supabase = getSupabaseClient();
-const categories = ['Bota','Botín','Zapatilla','Mocasín','Flat','Sandalia','Huarache'] as const;
-type Item = { id:number; modelo:string; color:string; categoria:string; proveedor:string|null; precio_compra:number; precio_venta:number; talla_3:number; talla_4:number; talla_5:number; talla_6:number; cantidad:number };
-type Form = { modelo:string; color:string; categoria:string; proveedor:string; precio_compra:string; precio_venta:string; talla_3:string; talla_4:string; talla_5:string; talla_6:string };
-const blank:Form={modelo:'',color:'',categoria:'Bota',proveedor:'',precio_compra:'0',precio_venta:'0',talla_3:'0',talla_4:'0',talla_5:'0',talla_6:'0'};
-const money=(n:number)=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n);
+type Tab = 'inicio' | 'ventas' | 'compras' | 'inventario';
+const tabs: {id:Tab; label:string}[] = [
+ {id:'inicio',label:'Inicio'},
+ {id:'ventas',label:'Ventas'},
+ {id:'compras',label:'Compras'},
+ {id:'inventario',label:'Inventario'}
+];
+function TabIcon({id}:{id:Tab}){
+ const common={width:23,height:23,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:1.8,strokeLinecap:'round' as const,strokeLinejoin:'round' as const};
+ if(id==='inicio')return <svg {...common}><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>;
+ if(id==='ventas')return <svg {...common}><path d="M4 5h16v15H4zM8 9h8M8 13h5M8 17h3"/><path d="m15 16 2 2 4-4"/></svg>;
+ if(id==='compras')return <svg {...common}><path d="M5 8h14l1 13H4L5 8ZM9 9V6a3 3 0 0 1 6 0v3"/><path d="M9 15h6"/></svg>;
+ return <svg {...common}><path d="M3 8h18v13H3zM3 8l3-5h12l3 5M9 12h6v4H9z"/></svg>;
+}
 export default function Home(){
- const [busy,setBusy]=useState(false);
- const [items,setItems]=useState<Item[]>([]),[loading,setLoading]=useState(false),[error,setError]=useState(''),[query,setQuery]=useState(''),[category,setCategory]=useState('Todas'),[editing,setEditing]=useState<number|null>(null),[form,setForm]=useState<Form>(blank),[modal,setModal]=useState(false);
- const load=useCallback(async()=>{setLoading(true);setError('');const {data,error}=await supabase.from('menudeo_inventario').select('*').order('modelo',{ascending:true}).order('color',{ascending:true});if(error)setError(error.message);else setItems((data||[]) as Item[]);setLoading(false)},[]);
- useEffect(()=>{void load()},[load]);
- const filtered=useMemo(()=>items.filter(x=>(category==='Todas'||x.categoria===category)&&[x.modelo,x.color,x.proveedor||''].join(' ').toLowerCase().includes(query.toLowerCase())),[items,category,query]);
- const totals=useMemo(()=>({pairs:items.reduce((s,x)=>s+x.cantidad,0),cost:items.reduce((s,x)=>s+x.cantidad*x.precio_compra,0),sale:items.reduce((s,x)=>s+x.cantidad*x.precio_venta,0)}),[items]);
- function openForm(item?:Item){setEditing(item?.id??null);setForm(item?{modelo:item.modelo,color:item.color,categoria:item.categoria,proveedor:item.proveedor||'',precio_compra:String(item.precio_compra),precio_venta:String(item.precio_venta),talla_3:String(item.talla_3),talla_4:String(item.talla_4),talla_5:String(item.talla_5),talla_6:String(item.talla_6)}:blank);setError('');setModal(true)}
- async function save(e:React.FormEvent){e.preventDefault();if(!form.modelo.trim()||!form.color.trim()){setError('Modelo y color son obligatorios');return}const nums=['precio_compra','precio_venta','talla_3','talla_4','talla_5','talla_6'] as const;for(const k of nums){const n=Number(form[k]);if(!Number.isFinite(n)||n<0||(k.startsWith('talla_')&&!Number.isInteger(n))){setError('Revisa precios y cantidades: deben ser números válidos no negativos');return}}
- setBusy(true);setError('');const payload={modelo:form.modelo.trim(),color:form.color.trim(),categoria:form.categoria,proveedor:form.proveedor.trim()||null,precio_compra:Number(form.precio_compra),precio_venta:Number(form.precio_venta),talla_3:Number(form.talla_3),talla_4:Number(form.talla_4),talla_5:Number(form.talla_5),talla_6:Number(form.talla_6)};
- const result=editing!==null?await supabase.from('menudeo_inventario').update(payload).eq('id',editing):await supabase.from('menudeo_inventario').insert(payload);
- setBusy(false);if(result.error){setError(result.error.message);return}setModal(false);await load()}
- return <main className="dashboard"><aside className="sidebar"><div className="brand">CAROLA <span>MENUDEO</span></div><nav><span className="active">▦ Inventario</span><span className="muted">Punto de venta · Próximamente</span><span className="muted">Clientes · Próximamente</span><span className="muted">Caja · Próximamente</span><span className="muted">Reportes · Próximamente</span></nav></aside><div className="content"><header className="top"><div><div className="overline">ADMINISTRACIÓN / INVENTARIO</div><h1>Inventario</h1><p>Consulta de modelos, variantes y existencias</p></div><span className="readonly-note">Consulta pública · Edición protegida</span></header><div className="stats"><article><small>Pares disponibles</small><strong>{totals.pairs.toLocaleString('es-MX')}</strong></article><article><small>Inversión en inventario</small><strong>{money(totals.cost)}</strong></article><article><small>Valor estimado de venta</small><strong>{money(totals.sale)}</strong></article><article><small>Utilidad potencial</small><strong>{money(totals.sale-totals.cost)}</strong></article></div><section className="inventory-panel"><div className="tools"><input aria-label="Buscar modelo" placeholder="Buscar modelo, color o proveedor…" value={query} onChange={e=>setQuery(e.target.value)}/><select aria-label="Filtrar categoría" value={category} onChange={e=>setCategory(e.target.value)}><option>Todas</option>{categories.map(c=><option key={c}>{c}</option>)}</select><button className="secondary" onClick={()=>void load()} disabled={loading}>↻ Actualizar</button></div>{error&&!modal&&<p className="error" role="alert">{error}</p>}{loading?<p className="empty">Cargando inventario…</p>:filtered.length===0?<div className="empty"><strong>{items.length?'No encontramos coincidencias':'Tu inventario está vacío'}</strong><p>{items.length?'Prueba otra búsqueda o categoría.':'Aún no hay modelos registrados.'}</p></div>:<div className="table-wrap"><table><thead><tr><th>Modelo / color</th><th>Categoría</th><th>Proveedor</th><th>Existencia</th><th>Costo</th><th>Venta</th><th></th></tr></thead><tbody>{filtered.map(x=><tr key={x.id}><td><b>{x.modelo}</b><small>{x.color}</small></td><td>{x.categoria}</td><td>{x.proveedor||'—'}</td><td><b>{x.cantidad} pares</b><small>3: {x.talla_3} · 4: {x.talla_4} · 5: {x.talla_5} · 6: {x.talla_6}</small></td><td>{money(x.precio_compra)}</td><td>{money(x.precio_venta)}</td><td>—</td></tr>)}</tbody></table></div>}</section></div>{modal&&<div className="modal-backdrop" onClick={()=>!busy&&setModal(false)}><section className="modal" role="dialog" aria-modal="true" aria-labelledby="form-title" onClick={e=>e.stopPropagation()}><div className="modal-head"><h2 id="form-title">{editing===null?'Nuevo modelo':'Editar modelo'}</h2><button aria-label="Cerrar" className="text-button" onClick={()=>setModal(false)}>✕</button></div><form onSubmit={save} className="stack"><div className="form-grid"><label>Modelo<input required value={form.modelo} onChange={e=>setForm({...form,modelo:e.target.value})}/></label><label>Color<input required value={form.color} onChange={e=>setForm({...form,color:e.target.value})}/></label><label>Categoría<select value={form.categoria} onChange={e=>setForm({...form,categoria:e.target.value})}>{categories.map(c=><option key={c}>{c}</option>)}</select></label><label>Proveedor<input value={form.proveedor} onChange={e=>setForm({...form,proveedor:e.target.value})}/></label><label>Costo por par<input type="number" min="0" step="0.01" value={form.precio_compra} onChange={e=>setForm({...form,precio_compra:e.target.value})}/></label><label>Venta por par<input type="number" min="0" step="0.01" value={form.precio_venta} onChange={e=>setForm({...form,precio_venta:e.target.value})}/></label></div><h3>Existencias por talla</h3><div className="sizes">{(['talla_3','talla_4','talla_5','talla_6'] as const).map(k=><label key={k}>Talla {k.slice(-1)}<input type="number" min="0" step="1" value={form[k]} onChange={e=>setForm({...form,[k]:e.target.value})}/></label>)}</div>{error&&<p className="error" role="alert">{error}</p>}<div className="actions"><button type="button" className="secondary" onClick={()=>setModal(false)}>Cancelar</button><button className="primary" disabled={busy}>{busy?'Guardando…':'Guardar modelo'}</button></div></form></section></div>}</main>
+ const [tab,setTab]=useState<Tab>('inicio');
+ const active=tabs.find(t=>t.id===tab)!;
+ return <main className="app-shell">
+  <div className="app-body">
+   <header className="app-header">
+    <div className="identity"><div className="identity-mark">C</div><div><span className="identity-name">Carola</span><span className="identity-sub">Menudeo</span></div></div>
+    <span className="header-pill">Administración</span>
+   </header>
+   {tab==='inicio'?<section className="home-screen">
+     <div className="welcome"><span className="eyebrow">TU ESPACIO DE TRABAJO</span><h1>Hola, bienvenido a Carola.</h1><p>Todo tu negocio, en un solo lugar.</p></div>
+     <section className="home-card"><div className="home-card-symbol">✦</div><span className="eyebrow">CAROLA MENUDEO</span><h2>Tu negocio, más organizado.</h2><p>Estamos preparando cada apartado para que administres tus ventas, compras e inventario de manera sencilla.</p></section>
+     <h2 className="section-heading">Tus apartados</h2>
+     <div className="quick-grid">{tabs.filter(t=>t.id!=='inicio').map(t=><button className="quick-card" key={t.id} onClick={()=>setTab(t.id)}><span className="quick-icon"><TabIcon id={t.id}/></span><span>{t.label}</span><span className="quick-arrow">›</span></button>)}</div>
+   </section>:<section className="section-screen" key={tab}>
+      <div className="eyebrow">CAROLA MENUDEO</div><h1>{active.label}</h1>
+      <div className="section-placeholder"><div className="placeholder-icon"><TabIcon id={tab}/></div><h2>Apartado de {active.label.toLowerCase()}</h2><p>Este espacio ya está creado. Aquí agregaremos las funciones que definamos para {active.label.toLowerCase()}.</p><span className="pending-label">Pendiente de configurar</span></div>
+   </section>}
+  </div>
+  <nav className="bottom-nav" aria-label="Navegación principal">{tabs.map(t=><button key={t.id} type="button" aria-current={tab===t.id?'page':undefined} className={'nav-tab'+(tab===t.id?' selected':'')} onClick={()=>setTab(t.id)}><TabIcon id={t.id}/><span>{t.label}</span></button>)}</nav>
+ </main>;
 }
