@@ -5,11 +5,10 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const supabase = getSupabaseClient();
-    const { error } = await supabase.from('menudeo_inventario').select('*', { count: 'exact', head: true });
-    if (error) return NextResponse.json({ status: 'error', database: 'unavailable', reason: 'Query failed' }, { status: 503 });
-    return NextResponse.json({ status: 'ok', database: 'connected', project: 'Carola Menudeo' });
+    getSupabaseClient();
+    // Inventory is private: anonymous health checks must not read protected tables.
+    return NextResponse.json({ status: 'ok', configuration: 'valid', project: 'Carola Menudeo', database: 'requires_authentication' });
   } catch {
-    return NextResponse.json({ status: 'error', database: 'unconfigured' }, { status: 503 });
+    return NextResponse.json({ status: 'error', configuration: 'invalid' }, { status: 503 });
   }
 }
