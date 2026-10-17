@@ -25,3 +25,20 @@
 .home-screen .insights{display:block;background:#fff;border:1px solid #eadfe3;border-radius:20px;padding:24px}
 .home-screen .insight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 @media(max-width:580px){.home-screen .today-card{padding:20px}.home-screen .insights{padding:18px}}
+
+/* Sale action bottom sheet: two clear choices, optimized for mobile. */
+.sale-modal-overlay{position:fixed;inset:0;z-index:60;background:rgba(18,25,33,.57);display:flex;align-items:flex-end;justify-content:center}
+.sale-sheet{background:#f6f9fa;width:100%;max-width:680px;border-radius:27px 27px 0 0;padding:28px clamp(18px,5vw,34px) max(34px,env(safe-area-inset-bottom));box-shadow:0 -12px 35px #0002}
+.sale-sheet-head{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.sale-sheet-head h2{font-size:26px;margin:0;font-weight:800;color:#1e2c37}
+.sale-sheet-close{width:34px;height:34px;flex:0 0 34px;border:0;border-radius:50%;background:#637e92;color:#fff;font-size:26px;line-height:1}
+.sale-sheet>p{color:#5b7181;margin:13px 0 28px;line-height:1.45;font-size:16px}
+.sale-sheet-options{display:grid;gap:12px}
+.sale-sheet-options button{display:flex;align-items:center;gap:16px;width:100%;border:0;border-radius:17px;background:#fff;text-align:left;padding:15px;color:#1d2d38}
+.sale-option-emoji{display:grid;place-items:center;flex:0 0 66px;height:66px;background:#fff2c6;border-radius:14px;font-size:33px}
+.sale-sheet-options button:nth-child(2) .sale-option-emoji{background:#e9edf0}
+.sale-option-copy{display:grid;gap:6px;flex:1;min-width:0}
+.sale-option-copy strong{font-size:18px;font-weight:800}
+.sale-option-copy small{font-size:13px;color:#637e92;line-height:1.4}
+.sale-option-arrow{font-size:30px;color:#637e92}
+@media(min-width:700px){.sale-modal-overlay{align-items:center;padding:20px}.sale-sheet{border-radius:24px;padding-bottom:30px}}
