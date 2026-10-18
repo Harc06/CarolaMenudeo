@@ -1,5 +1,5 @@
-import StyledSelect from './components/StyledSelect';
 'use client';
+import StyledSelect from './components/StyledSelect';
 import { useCallback, useEffect, useState } from 'react';
 import { getSupabaseClient } from '../lib/supabase/client';
 import { getAdminToken } from '../lib/admin-session';
