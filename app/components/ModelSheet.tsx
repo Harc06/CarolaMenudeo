@@ -30,8 +30,12 @@ export default function ModelSheet({name,variants,token,onClose,onSaved}:{name:s
  const expected=view==='add'?[extra]:drafts;
  const normalized=(value:string|null|undefined)=>String(value??'').trim();
  const matches=(row:CatalogVariant,d:Draft)=>normalized(row.modelo)===normalized(d.modelo)&&normalized(row.color)===normalized(d.color)&&normalized(row.categoria)===normalized(d.categoria)&&normalized(row.proveedor)===normalized(d.proveedor)&&Number(row.precio_compra)===Number(d.precio_compra)&&Number(row.precio_venta)===Number(d.precio_venta)&&sizes.every(n=>Number(row[`talla_${n}`])===Number(d[`talla_${n}`]));
- if(expected.some(d=>!rows.some(row=>(d.id===null||Number(row.id)===d.id)&&matches(row,d)))throw new Error('La base no refleja todos los cambios. Revisa el modelo antes de intentarlo otra vez.');
- if(removedIds.some(id=>rows.some(row=>Number(row.id)===id)))throw new Error('La base todavía contiene un color marcado para eliminar.');
+ if (expected.some(d => !rows.some(row => (d.id === null || Number(row.id) === d.id) && matches(row, d)))) {
+  throw new Error('La base no refleja todos los cambios. Revisa el modelo antes de intentarlo otra vez.');
+ }
+ if (removedIds.some(id => rows.some(row => Number(row.id) === id))) {
+  throw new Error('La base todavía contiene un color marcado para eliminar.');
+ }
  await onSaved();
  onClose();
 
