@@ -171,3 +171,7 @@
 .carola-select-option:hover,.carola-select-option:focus-visible{background:#fbedf3;outline:none}.carola-select-option.is-selected{background:#fbedf3;color:#a53f6c}.carola-select-option:disabled{opacity:.35;cursor:not-allowed}
 .carola-select-option span:last-child:not(:first-child){color:#a53f6c}
 @media(max-width:520px){.carola-select-menu{max-height:35dvh}}
+
+/* Acceso principal Carola Menudeo */
+.login-shell{width:min(440px,calc(100% - 32px));margin:clamp(60px,12vh,150px) auto;padding:36px 28px;background:white;border:1px solid #eadde1;border-radius:28px;box-shadow:0 20px 60px #251d2810;text-align:center}
+.login-shell .identity-mark{margin:0 auto 20px}.login-shell h1{font-size:30px;margin:0 0 10px}.login-shell p{color:#7b747a;margin:0 0 24px}.login-shell form{display:grid;gap:14px}.login-shell input{width:100%;padding:17px;border:1px solid #ddd2d6;border-radius:14px;text-align:center;font-size:23px;letter-spacing:8px}.login-shell button{padding:16px;border:0;border-radius:14px;background:#1e303d;color:white;font-weight:700;font-size:16px;cursor:pointer}.login-shell button:disabled{opacity:.55;cursor:not-allowed}.header-session{display:flex;align-items:center;gap:12px}.logout-button{border:1px solid #e6d9dd;border-radius:24px;background:white;padding:10px 13px;color:#9d3f64;cursor:pointer;font-weight:600}@media(max-width:520px){.header-session{gap:5px}.header-session .header-pill{display:none}.logout-button{font-size:12px;padding:9px}}
