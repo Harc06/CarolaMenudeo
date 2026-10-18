@@ -1,5 +1,5 @@
 'use client';
-import {useState} from 'react';
+import {useEffect,useState} from 'react';
 import {getSupabaseClient} from '../../lib/supabase/client';
 import BottomSheet from './BottomSheet';
 const categories=['Bota','Botín','Zapatilla','Mocasín','Flat','Sandalia','Huarache'] as const;
@@ -8,9 +8,10 @@ type Fields={modelo:string;proveedor:string;precio_compra:string;precio_venta:st
 const initial:Fields={modelo:'',proveedor:'',precio_compra:'',precio_venta:'',categoria:'',color:'',talla_3:'0',talla_4:'0',talla_5:'0',talla_6:'0'};
 export default function CatalogForm({mode,onClose,onSaved}:{mode:'modelo'|'categoria';onClose:()=>void;onSaved:()=>void}){
  const [pin,setPin]=useState(''),[token,setToken]=useState(''),[pinError,setPinError]=useState(''),[loggingIn,setLoggingIn]=useState(false);
+ useEffect(()=>{const saved=sessionStorage.getItem('menudeo_admin_token');if(saved)setToken(saved)},[]);
  const [form,setForm]=useState<Fields>(initial),[categoryName,setCategoryName]=useState(''),[busy,setBusy]=useState(false),[message,setMessage]=useState('');
  const set=(field:keyof Fields,value:string)=>setForm(x=>({...x,[field]:value}));
- const unlock=async()=>{setPinError('');setLoggingIn(true);try{const {data,error}=await getSupabaseClient().rpc('menudeo_pin_login',{p_pin:pin});if(error)throw error;if(!data){setPinError('PIN incorrecto o acceso temporalmente bloqueado.');return}setToken(String(data));setPin('')}catch{setPinError('No fue posible validar el PIN con Supabase Menudeo.')}finally{setLoggingIn(false)}};
+ const unlock=async()=>{setPinError('');setLoggingIn(true);try{const {data,error}=await getSupabaseClient().rpc('menudeo_pin_login',{p_pin:pin});if(error)throw error;if(!data){setPinError('PIN incorrecto o acceso temporalmente bloqueado.');return}setToken(String(data));sessionStorage.setItem('menudeo_admin_token',String(data));setPin('')}catch{setPinError('No fue posible validar el PIN con Supabase Menudeo.')}finally{setLoggingIn(false)}};
  const save=async(e:React.FormEvent<HTMLFormElement>)=>{e.preventDefault();setMessage('');
  if(mode==='categoria'){setMessage('La base de Menudeo actualmente permite solo siete categorías predefinidas. Para guardar nuevas categorías necesitamos ampliar su estructura de forma segura; no se ha modificado ninguna base de datos.');return}
  const priceBuy=Number(form.precio_compra),priceSell=Number(form.precio_venta);
