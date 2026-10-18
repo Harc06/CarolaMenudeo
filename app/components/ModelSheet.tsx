@@ -22,11 +22,18 @@ export default function ModelSheet({name,variants,token,onClose,onSaved}:{name:s
  const save=async()=>{setError('');const list=view==='add'?[extra]:drafts;if(!list.every(validate)){setError('Completa los campos y utiliza precios y existencias válidos.');return}setBusy(true);try{
  if(view==='add'){const {data,error:failure}=await getSupabaseClient().rpc('menudeo_pin_add_model',params(extra));if(failure)throw failure;if(data===false)throw new Error('No se pudo crear el color');}
  else{const updates=drafts.map(d=>({id:d.id,modelo:d.modelo.trim(),color:d.color.trim(),categoria:d.categoria,proveedor:d.proveedor.trim(),precio_compra:Number(d.precio_compra),precio_venta:Number(d.precio_venta),talla_3:Number(d.talla_3),talla_4:Number(d.talla_4),talla_5:Number(d.talla_5),talla_6:Number(d.talla_6)}));const {data:result,error:failure}=await getSupabaseClient().rpc('menudeo_pin_save_variants',{p_token:token,p_updates:updates,p_deletes:removedIds});if(failure)throw failure;if(!result||Number(result.updated)!==updates.length||Number(result.deleted)!==removedIds.length)throw new Error('Supabase no confirmó todos los cambios.');}
- // La operación de escritura es transaccional en Supabase: el RPC confirma
- // cuántas variantes actualizó y eliminó. No bloquear el cierre por una
- // segunda lectura (que puede fallar o usar datos anteriores).
+ // Verificar con una segunda lectura real de la base de Menudeo antes de cerrar.
+ const {data:stored,error:readError}=await getSupabaseClient().rpc('menudeo_pin_list_models',{p_token:token});
+ if(readError)throw new Error('Se envió el guardado, pero no fue posible verificarlo: '+readError.message);
+ if(!Array.isArray(stored))throw new Error('Supabase no devolvió el inventario actualizado.');
+ const rows=stored as CatalogVariant[];
+ const expected=view==='add'?[extra]:drafts;
+ const normalized=(value:string|null|undefined)=>String(value??'').trim();
+ const matches=(row:CatalogVariant,d:Draft)=>normalized(row.modelo)===normalized(d.modelo)&&normalized(row.color)===normalized(d.color)&&normalized(row.categoria)===normalized(d.categoria)&&normalized(row.proveedor)===normalized(d.proveedor)&&Number(row.precio_compra)===Number(d.precio_compra)&&Number(row.precio_venta)===Number(d.precio_venta)&&sizes.every(n=>Number(row[`talla_${n}`])===Number(d[`talla_${n}`]));
+ if(expected.some(d=>!rows.some(row=>(d.id===null||Number(row.id)===d.id)&&matches(row,d)))throw new Error('La base no refleja todos los cambios. Revisa el modelo antes de intentarlo otra vez.');
+ if(removedIds.some(id=>rows.some(row=>Number(row.id)===id)))throw new Error('La base todavía contiene un color marcado para eliminar.');
+ await onSaved();
  onClose();
- void onSaved().catch((refreshError)=>{console.error('No se pudo refrescar el inventario después de guardar',refreshError);});
 
  }catch(e){const failure=e as {code?:string;message?:string};setError(failure.code==='23505'?'Ya existe una variante con ese modelo y color.':failure.message||'No se pudieron guardar los cambios. Comprueba tu sesión PIN.')}finally{setBusy(false)}};
  const removeColor=(id:number|null,color:string)=>{if(id===null)return;if(!window.confirm(`¿Eliminar el color "${color}" del inventario? Se borrará de Supabase al presionar Guardar cambios.`))return;setRemovedIds(prev=>[...prev,id]);setDrafts(prev=>prev.filter(d=>d.id!==id));setError('');};
