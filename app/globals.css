@@ -158,3 +158,16 @@
 .account-transfer-button{border:1px solid #ecd6df;background:#fff5f8;color:#a6476d;border-radius:12px;padding:9px 14px;font-size:14px;font-weight:700;cursor:pointer;margin:4px 0 12px;align-self:flex-start}.account-transfer-button:hover{background:#f9e7ef}
 
 .account-modal-field select{width:100%;min-height:52px;border:1px solid #e2d8dd;border-radius:14px;padding:12px 14px;font-size:17px;color:#25333d;background:#fff}.transfer-available{padding:13px 16px;background:#f9f0f4;border-radius:14px;display:flex;justify-content:space-between;gap:12px;align-items:center}.account-modal-sheet .account-edit-actions button:disabled{opacity:.5;cursor:not-allowed}
+
+
+/* Selector de Carola: menú consistente en todas las pantallas */
+.carola-select{position:relative;width:100%;min-width:0;font-size:15px;font-weight:600;color:#26333d}
+.carola-select-trigger{width:100%;min-height:52px;padding:12px 16px;border:1px solid #e5d7de;border-radius:15px;background:#fff;color:#26333d;display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;font:inherit;cursor:pointer;box-shadow:0 2px 8px #35232b05;transition:border-color .15s,box-shadow .15s}
+.carola-select-trigger:hover,.carola-select-trigger.is-open{border-color:#b44b75;box-shadow:0 0 0 3px #b44b7518}
+.carola-select-trigger:focus-visible{outline:3px solid #b44b7540;outline-offset:2px}
+.carola-select-chevron{color:#a44a70;font-size:24px;line-height:1;transition:transform .15s}.carola-select-trigger.is-open .carola-select-chevron{transform:rotate(180deg)}
+.carola-select-menu{position:absolute;z-index:1600;top:calc(100% + 7px);left:0;right:0;max-height:min(290px,42dvh);overflow-y:auto;overscroll-behavior:contain;padding:6px;background:#fff;border:1px solid #ecdce3;border-radius:16px;box-shadow:0 14px 40px #1b243022}
+.carola-select-option{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:46px;padding:11px 13px;background:transparent;border:0;border-radius:10px;color:#26333d;font:inherit;text-align:left;cursor:pointer}
+.carola-select-option:hover,.carola-select-option:focus-visible{background:#fbedf3;outline:none}.carola-select-option.is-selected{background:#fbedf3;color:#a53f6c}.carola-select-option:disabled{opacity:.35;cursor:not-allowed}
+.carola-select-option span:last-child:not(:first-child){color:#a53f6c}
+@media(max-width:520px){.carola-select-menu{max-height:35dvh}}
