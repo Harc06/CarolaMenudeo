@@ -145,3 +145,5 @@
 .sales-entry-lines p{margin:8px 0;color:#35404b}
 .sales-entry>p{font-size:14px;color:#555}
 .sales-pending{display:inline-block;background:#fdf0e6;color:#8a5a31;border-radius:99px;padding:7px 12px;font-size:12px;font-weight:700}
+
+.sale-record-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px;border-top:1px solid #eee5e9;padding-top:15px}.sale-record-actions button{border:1px solid #ead9e0;background:#fff5f8;color:#9e4267;padding:11px 15px;border-radius:12px;font-weight:750;cursor:pointer}.sale-record-actions button:nth-child(2),.sale-record-actions button:nth-child(3){background:#fff5f3;color:#a13f44;border-color:#f0d9d9}.sale-record-actions button:disabled{opacity:.5;cursor:wait}
