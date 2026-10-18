@@ -2,7 +2,7 @@
 import StyledSelect from './components/StyledSelect';
 import { useCallback, useEffect, useState } from 'react';
 import { getSupabaseClient } from '../lib/supabase/client';
-import { getAdminToken } from '../lib/admin-session';
+import { getAdminToken, saveAdminToken, clearAdminToken } from '../lib/admin-session';
 import NoteSheet, { type SaleRecord, type NoteKind } from './components/NoteSheet';
 import VirtualCatalog from './components/VirtualCatalog';
 
@@ -23,6 +23,14 @@ function TabIcon({id}:{id:Tab}){
  return <svg {...common}><path d="M3 8h18v13H3zM3 8l3-5h12l3 5M9 12h6v4H9z"/></svg>;
 }
 export default function Home(){
+ const [authReady,setAuthReady]=useState(false);
+ const [authenticated,setAuthenticated]=useState(false);
+ const [loginPin,setLoginPin]=useState('');
+ const [loginBusy,setLoginBusy]=useState(false);
+ const [loginError,setLoginError]=useState('');
+ useEffect(()=>{setAuthenticated(Boolean(getAdminToken()));setAuthReady(true)},[]);
+ const login=async(e:React.FormEvent)=>{e.preventDefault();setLoginBusy(true);setLoginError('');try{const {data,error}=await getSupabaseClient().rpc('menudeo_pin_login',{p_pin:loginPin});if(error)throw error;if(!data){setLoginError('PIN incorrecto o bloqueado temporalmente.');return;}saveAdminToken(String(data));setAuthenticated(true);setLoginPin('');}catch{setLoginError('No se pudo validar el PIN.')}finally{setLoginBusy(false)}};
+ const logout=async()=>{const token=getAdminToken();clearAdminToken();setAuthenticated(false);setTab('inicio');setExtra(null);setSales([]);setAccounts([]);setMovements([]);if(token)await getSupabaseClient().rpc('menudeo_pin_logout',{p_token:token});};
  const [tab,setTab]=useState<Tab>('inicio');
  const [extra,setExtra]=useState<Extra|null>(null);
  const [saleOptionsOpen,setSaleOptionsOpen]=useState(false);
@@ -61,11 +69,13 @@ export default function Home(){
  const go=(next:Tab)=>{setTab(next);setExtra(null);setSaleOptionsOpen(false);setSaleFlow(null);window.scrollTo({top:0,behavior:'smooth'})};
  const chooseSale=(option:NoteKind)=>{setSaleOptionsOpen(false);setSaleFlow(option)};
  const active=tabs.find(t=>t.id===tab)!;
+ if(!authReady)return <main className="app-shell"/>;
+ if(!authenticated)return <main className="app-shell"><section className="login-shell"><div className="identity-mark">C</div><h1>Carola Menudeo</h1><p>Ingresa tu PIN para iniciar sesión.</p><form onSubmit={login}><input type="password" inputMode="numeric" maxLength={4} pattern="[0-9]{4}" autoComplete="off" aria-label="PIN" placeholder="PIN de 4 dígitos" value={loginPin} onChange={e=>setLoginPin(e.target.value.replace(/[^0-9]/g,''))}/><button type="submit" disabled={loginBusy||loginPin.length!==4}>{loginBusy?'Validando…':'Iniciar sesión'}</button></form>{loginError&&<p role="alert" className="note-error">{loginError}</p>}</section></main>;
  return <main className="app-shell">
   <div className="app-body">
    <header className="app-header">
     <div className="identity"><div className="identity-mark">C</div><div><span className="identity-name">Carola</span><span className="identity-sub">Menudeo</span></div></div>
-    <span className="header-pill">Administración</span>
+    <div className="header-session"><span className="header-pill">Administración</span><button type="button" className="logout-button" onClick={()=>void logout()}>Cerrar sesión</button></div>
    </header>
    {extra==='Catálogo virtual'?<VirtualCatalog/>:extra==='Cuentas'?<section className="section-screen accounts-screen"><div className="eyebrow">CAROLA MENUDEO</div><h1>Cuentas</h1><p>Ingresos de ventas, ajustes y devoluciones registrados en Supabase.</p>{accountsError&&<p className="note-error" role="alert">{accountsError}</p>}<div className="account-cards">{([{key:'efectivo',name:'Efectivo',icon:'💵'},{key:'bbva',name:'Banco',icon:'🏦'}] as const).map(a=><article className="account-card" key={a.key}><span className="account-icon">{a.icon}</span><div className="account-title"><h2>{a.name}</h2><button type="button" className="account-edit" aria-label={'Editar saldo de '+a.name} onClick={()=>{setEditingAccount(a.key);setNewBalance(String(accounts.find(x=>x.cuenta===a.key)?.saldo??0));setAccountsError('')}}>✎ Editar</button></div><button type="button" className="account-transfer-button" onClick={()=>{setTransferFrom(a.key);setTransferTo(a.key==='efectivo'?'bbva':'efectivo');setTransferAmount('');setAccountsError('')}}>⇄ Transferir</button><strong>{money(Number(accounts.find(x=>x.cuenta===a.key)?.saldo||0))}</strong><small>{a.key==='bbva'?'Ventas con tarjeta':'Ventas en efectivo'}</small></article>)}</div><h2>Movimientos recientes</h2>{movements.length===0?<p>Aún no hay movimientos de ventas.</p>:<div className="account-movements">{movements.map(m=><article key={m.id}><div><strong>{m.concepto.split(':')[0]}</strong><small>{m.fecha} · {m.cuenta==='bbva'?'Banco':'Efectivo'}</small></div><strong className={m.monto<0?'negative':'positive'}>{m.monto>0?'+':''}{money(Number(m.monto))}</strong><button type="button" className="account-movement-edit" onClick={()=>openMovement(m)} aria-label={'Administrar movimiento '+m.id}>✎</button></article>)}</div>}</section>:tab==='ventas'&&!extra?<section className="section-screen sales-register"><div className="eyebrow">CAROLA MENUDEO</div><h1>Registro de ventas</h1><p>Ventas registradas en Supabase. El inventario se descuenta al vender y se restaura al eliminar o devolver.</p><button type="button" className="sale-action" onClick={()=>{setEditSale(null);chooseSale('Realizar venta')}}>+ Realizar venta</button>{saleError&&<p role="alert" className="note-error">{saleError}</p>}{sales.length===0?<div className="section-placeholder"><h2>Sin ventas registradas</h2><p>Al guardar una venta aparecerá aquí.</p></div>:<div className="sales-list">{sales.map(s=><article className="sales-entry" key={s.id}><div className="sales-entry-head"><div><strong>{s.cliente}</strong><small>{s.fecha} · {s.metodoPago}</small></div><strong>{new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(s.total)}</strong></div><div className="sales-entry-lines">{s.lineas.map((l,i)=><p key={i}>{l.cantidad} × Modelo {l.modelo} · {l.color} · Talla {l.talla} · {new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(l.precio)} c/u</p>)}</div>{s.detalle&&<p><b>Detalle:</b> {s.detalle}</p>}<div className="sale-record-actions"><button type="button" onClick={()=>{setEditSale(s);setSaleFlow('Realizar venta')}}>Editar</button><button type="button" disabled={saleBusy} onClick={()=>void actSale(s,'delete')}>Eliminar</button><button type="button" disabled={saleBusy} onClick={()=>void actSale(s,'refund')}>Devolución</button><button type="button" onClick={()=>{setEditSale(s);setSaleFlow('Realizar venta')}}>Cambio de producto</button></div></article>)}</div>}</section>:tab==='inicio'&&!extra?<section className="home-screen">
      <section className="today-card">
