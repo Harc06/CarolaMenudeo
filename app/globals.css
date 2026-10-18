@@ -80,3 +80,5 @@
 .shared-sheet-header p{font-size:14px;color:#858087;line-height:1.6;margin:0}
 .shared-sheet-header>button{flex:0 0 43px;height:43px;border:0;border-radius:50%;background:#f4eff1;color:#9b5071;font-size:29px}
 @media(min-width:750px){.shared-sheet-overlay{align-items:center;padding:24px}.shared-sheet{border-radius:25px;max-height:90dvh;height:min(86dvh,900px)}}
+
+.catalog-pin-panel{padding:30px 22px;overflow:auto}.catalog-pin-panel h3{font-size:21px;margin:0 0 8px}.catalog-pin-panel>p{font-size:14px;color:#7a7278;line-height:1.6}.catalog-pin-panel form{display:grid;gap:12px;margin-top:20px}.catalog-pin-panel input{width:100%;font-size:25px;letter-spacing:.3em;text-align:center;border:1px solid #e5dce0;border-radius:15px;padding:17px}.catalog-pin-panel button{border:0;border-radius:14px;background:#1c2d39;color:#fff;padding:16px;font-weight:800}.catalog-pin-panel button:disabled{opacity:.5}
