@@ -120,3 +120,10 @@
 .note-size-option:disabled{opacity:.55;cursor:not-allowed;background:#f8f7f8}
 .note-size-check{color:#aa4775;font-weight:900}
 @media(max-width:480px){.note-size-options{min-width:190px}.note-size-option{padding:10px 8px}.note-size-stock{font-size:11px}}
+
+
+/* Menús consistentes para modelo y color en las notas de venta. */
+.note-size-field .note-choice-input{width:100%;min-height:58px;border:1px solid #d7e0e5;border-radius:14px;background:#fff;padding:13px 15px;font:inherit;font-size:15px;font-weight:650;color:#253442;box-sizing:border-box}
+.note-size-field .note-choice-input:focus{border-color:#bd658a;outline:3px solid #f9e4ed}
+.note-choice-options{max-height:265px;overflow-y:auto;overscroll-behavior:contain}
+.note-choice-empty{margin:0;padding:14px;color:#857b82;font-size:13px}
