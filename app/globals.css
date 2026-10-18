@@ -127,3 +127,21 @@
 .note-size-field .note-choice-input:focus{border-color:#bd658a;outline:3px solid #f9e4ed}
 .note-choice-options{max-height:265px;overflow-y:auto;overscroll-behavior:contain}
 .note-choice-empty{margin:0;padding:14px;color:#857b82;font-size:13px}
+
+
+.payment-choice{border:1px solid #e9dfe4;border-radius:16px;padding:16px;margin:18px 0;background:#fff}
+.payment-choice legend{font-weight:750;color:#263442;padding:0 6px}
+.payment-choice>div{display:flex;gap:12px;flex-wrap:wrap}
+.payment-choice label{display:flex;align-items:center;gap:10px;flex:1;min-width:130px;padding:14px;border:1px solid #e6dce2;border-radius:12px;font-weight:700;cursor:pointer}
+.payment-choice input{accent-color:#b44975;width:18px;height:18px}
+.sales-register>p{color:#7d7880;margin:0 0 24px}
+.sales-register .sale-action{max-width:300px;margin:0 0 24px}
+.sales-list{display:grid;gap:16px;margin:24px 0 120px}
+.sales-entry{border:1px solid #eadfe5;background:#fff;border-radius:20px;padding:20px;box-shadow:0 8px 28px #25131a08}
+.sales-entry-head{display:flex;justify-content:space-between;gap:12px;align-items:start}
+.sales-entry-head strong{font-size:19px;color:#222b35}
+.sales-entry-head small{display:block;color:#847b81;margin-top:5px}
+.sales-entry-lines{border-top:1px solid #eee5e9;margin-top:14px;padding-top:8px}
+.sales-entry-lines p{margin:8px 0;color:#35404b}
+.sales-entry>p{font-size:14px;color:#555}
+.sales-pending{display:inline-block;background:#fdf0e6;color:#8a5a31;border-radius:99px;padding:7px 12px;font-size:12px;font-weight:700}
