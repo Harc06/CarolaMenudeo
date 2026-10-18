@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import NoteSheet, { type NoteKind } from './components/NoteSheet';
+import VirtualCatalog from './components/VirtualCatalog';
 
 type Tab = 'inicio' | 'ventas' | 'compras' | 'inventario';
 type Extra = 'Catálogo virtual' | 'Deudas' | 'Cotizaciones' | 'Estadísticas' | 'Clientes' | 'Proveedores' | 'Empleados';
@@ -32,7 +33,7 @@ export default function Home(){
     <div className="identity"><div className="identity-mark">C</div><div><span className="identity-name">Carola</span><span className="identity-sub">Menudeo</span></div></div>
     <span className="header-pill">Administración</span>
    </header>
-   {tab==='inicio'&&!extra?<section className="home-screen">
+   {extra==='Catálogo virtual'?<VirtualCatalog/>:tab==='inicio'&&!extra?<section className="home-screen">
      <section className="today-card">
        <h2>Tu negocio hoy</h2>
        <div className="today-top"><div><strong className="today-amount">—</strong><span>Ventas hoy</span></div><div className="today-compare">vs ayer <span>Sin datos</span></div></div>
