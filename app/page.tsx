@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
-import NoteSheet, { type NoteKind } from './components/NoteSheet';
+import { useEffect, useState } from 'react';
+import NoteSheet, { type SaleRecord, type NoteKind } from './components/NoteSheet';
 import VirtualCatalog from './components/VirtualCatalog';
 
 type Tab = 'inicio' | 'ventas' | 'compras' | 'inventario';
@@ -24,6 +24,8 @@ export default function Home(){
  const [extra,setExtra]=useState<Extra|null>(null);
  const [saleOptionsOpen,setSaleOptionsOpen]=useState(false);
  const [saleFlow,setSaleFlow]=useState<NoteKind|null>(null);
+ const [sales,setSales]=useState<SaleRecord[]>([]);
+ useEffect(()=>{try{setSales(JSON.parse(localStorage.getItem('carola_menudeo_sales_drafts_v1')||'[]') as SaleRecord[])}catch{setSales([])}},[]);
  const go=(next:Tab)=>{setTab(next);setExtra(null);setSaleOptionsOpen(false);setSaleFlow(null);window.scrollTo({top:0,behavior:'smooth'})};
  const chooseSale=(option:NoteKind)=>{setSaleOptionsOpen(false);setSaleFlow(option)};
  const active=tabs.find(t=>t.id===tab)!;
@@ -33,7 +35,7 @@ export default function Home(){
     <div className="identity"><div className="identity-mark">C</div><div><span className="identity-name">Carola</span><span className="identity-sub">Menudeo</span></div></div>
     <span className="header-pill">Administración</span>
    </header>
-   {extra==='Catálogo virtual'?<VirtualCatalog/>:tab==='inicio'&&!extra?<section className="home-screen">
+   {extra==='Catálogo virtual'?<VirtualCatalog/>:tab==='ventas'&&!extra?<section className="section-screen sales-register"><div className="eyebrow">CAROLA MENUDEO</div><h1>Registro de ventas</h1><p>Ventas guardadas en este dispositivo, pendientes de sincronización con la base de datos. No se ha descontado inventario.</p><button type="button" className="sale-action" onClick={()=>chooseSale('Realizar venta')}>+ Realizar venta</button>{sales.length===0?<div className="section-placeholder"><h2>Sin ventas registradas</h2><p>Al guardar una venta aparecerá aquí.</p></div>:<div className="sales-list">{sales.map(s=><article className="sales-entry" key={s.id}><div className="sales-entry-head"><div><strong>{s.cliente}</strong><small>{s.fecha} · {s.metodoPago}</small></div><strong>{new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(s.total)}</strong></div><div className="sales-entry-lines">{s.lineas.map((l,i)=><p key={i}>{l.cantidad} × Modelo {l.modelo} · {l.color} · Talla {l.talla} · {new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(l.precio)} c/u</p>)}</div>{s.detalle&&<p><b>Detalle:</b> {s.detalle}</p>}<span className="sales-pending">Pendiente de sincronizar</span></article>)}</div>}</section>:tab==='inicio'&&!extra?<section className="home-screen">
      <section className="today-card">
        <h2>Tu negocio hoy</h2>
        <div className="today-top"><div><strong className="today-amount">—</strong><span>Ventas hoy</span></div><div className="today-compare">vs ayer <span>Sin datos</span></div></div>
@@ -51,7 +53,7 @@ export default function Home(){
    </section>}
   </div>
   {saleOptionsOpen&&<div className="sale-modal-overlay" onClick={()=>setSaleOptionsOpen(false)}><section className="sale-sheet" role="dialog" aria-modal="true" aria-labelledby="sale-sheet-title" onClick={e=>e.stopPropagation()}><div className="sale-sheet-head"><h2 id="sale-sheet-title">Nueva venta</h2><button type="button" className="sale-sheet-close" aria-label="Cerrar opciones de venta" onClick={()=>setSaleOptionsOpen(false)}>×</button></div><p>Selecciona qué quieres hacer.</p><div className="sale-sheet-options"><button type="button" onClick={()=>chooseSale('Realizar venta')}><span className="sale-option-emoji">🛍️</span><span className="sale-option-copy"><strong>Realizar venta</strong><small>Registra una venta de productos.</small></span><span className="sale-option-arrow">›</span></button><button type="button" onClick={()=>chooseSale('Cotización libre')}><span className="sale-option-emoji">📝</span><span className="sale-option-copy"><strong>Cotización libre</strong><small>Prepara una cotización sin seleccionar productos del inventario.</small></span><span className="sale-option-arrow">›</span></button></div></section></div>}
-  {saleFlow&&<NoteSheet kind={saleFlow} onClose={()=>setSaleFlow(null)}/>}
+  {saleFlow&&<NoteSheet kind={saleFlow} onClose={()=>setSaleFlow(null)} onSale={sale=>{setSales(current=>[sale,...current]);setTab('ventas');setExtra(null)}}/>}
   <nav className="bottom-nav" aria-label="Navegación principal">{tabs.map(t=><button key={t.id} type="button" aria-current={tab===t.id?'page':undefined} className={'nav-tab'+(tab===t.id?' selected':'')} onClick={()=>go(t.id)}><TabIcon id={t.id}/><span>{t.label}</span></button>)}</nav>
  </main>;
 }
