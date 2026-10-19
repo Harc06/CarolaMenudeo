@@ -24,7 +24,15 @@ export default function QuoteShare({quote,onClose}:{quote:QuoteRecord;onClose:()
  const [pdfLoading,setPdfLoading]=useState(true);
  const [pdfError,setPdfError]=useState('');
  useEffect(()=>{let cancelled=false;(async()=>{try{const {jsPDF}=await import('jspdf');const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});const canvases=await makeImages();canvases.forEach((canvas,i)=>{if(i)doc.addPage();doc.addImage(canvas.toDataURL('image/jpeg',0.86),'JPEG',0,0,210,297)});const blob=doc.output('blob');if(!cancelled)setPdfFile(new File([blob],'cotizacion-araly-'+quote.fecha+'.pdf',{type:'application/pdf'}))}catch(e){if(!cancelled)setPdfError(e instanceof Error?e.message:'No se pudo generar el PDF')}finally{if(!cancelled)setPdfLoading(false)}})();return()=>{cancelled=true}},[quote.id]);
- const sharePdf=async()=>{if(!pdfFile||sharing.current)return;sharing.current=true;setError('');try{if(navigator.share&&navigator.canShare?.({files:[pdfFile]})){await navigator.share({files:[pdfFile],title:'Nota Calzado Araly'});setError('PDF compartido.')}else{download(pdfFile,pdfFile.name);setError('El navegador no permite compartir archivos directamente. Se guardó el PDF para compartirlo desde Archivos.')}}catch(e){if(e instanceof Error&&e.name==='AbortError'){setError('Compartir cancelado.');return}setError(e instanceof Error?e.message:'No se pudo compartir el PDF')}finally{sharing.current=false}};
+ const sharePdf=async()=>{if(!pdfFile||sharing.current)return;sharing.current=true;setError('');try{
+   // Admin Carola utiliza el archivo y una descarga directa si iOS no puede abrir el menú nativo.
+   if(navigator.share&&navigator.canShare?.({files:[pdfFile]})){
+     try{await navigator.share({files:[pdfFile],title:'Nota Calzado Araly'});return}
+     catch(e){if(e instanceof Error&&e.name==='AbortError')return;console.warn('Safari no pudo compartir el PDF; se ofrecerá la descarga.',e)}
+   }
+   download(pdfFile,pdfFile.name);
+   setError('PDF descargado. Puedes abrirlo desde Archivos y compartirlo o imprimirlo.');
+ }catch(e){setError(e instanceof Error?e.message:'No se pudo preparar el archivo')}finally{sharing.current=false}};
  const cachedImage=useRef<Blob|null>(null);
  const buildImage=async()=>{if(cachedImage.current)return cachedImage.current;const canvases=await makeImages();const joined=document.createElement('canvas');joined.width=canvases[0].width;joined.height=canvases.reduce((sum,c)=>sum+c.height,0);const ctx=joined.getContext('2d');if(!ctx)throw Error('No se pudieron unir las páginas');let y=0;for(const canvas of canvases){ctx.drawImage(canvas,0,y);y+=canvas.height}const blob=await new Promise<Blob>((resolve,reject)=>joined.toBlob(result=>result?resolve(result):reject(Error('No se pudo crear la imagen')),'image/png'));cachedImage.current=blob;return blob};
  const copyImages=async()=>{if(busy)return;setError('');if(!navigator.clipboard?.write||typeof ClipboardItem==='undefined'){setError('Este navegador no permite copiar imágenes. Utiliza la opción de guardar.');return}setBusy(true);try{const promise=buildImage();await navigator.clipboard.write([new ClipboardItem({'image/png':promise})]);setError('Imagen completa copiada: '+pages.length+' página(s).')}catch(e){setError(e instanceof Error?e.message:'No se pudo copiar la imagen')}finally{setBusy(false)}};
