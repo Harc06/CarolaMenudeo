@@ -178,3 +178,65 @@
 
 /* Modalidad de cotización libre */
 .quote-choice{padding:26px!important}.quote-choice h3{margin:0 0 10px;font-size:22px;color:#20303c}.quote-choice p{color:#68747e;line-height:1.5}.quote-mode-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:24px}.quote-mode-buttons button{display:flex;flex-direction:column;gap:10px;align-items:flex-start;text-align:left;border:1px solid #ead8df;border-radius:18px;background:#fff;padding:22px;cursor:pointer;color:#23333f}.quote-mode-buttons button:hover,.quote-mode-buttons button:focus-visible{border-color:#bc5279;background:#fff4f8}.quote-mode-buttons strong{font-size:20px}.quote-mode-buttons span{font-size:14px;color:#7c7479;line-height:1.5}.quote-add-actions{display:flex;flex-wrap:wrap;gap:10px}.quote-add-actions .note-add{flex:1 1 155px}@media(max-width:560px){.quote-mode-buttons{grid-template-columns:1fr}.quote-choice{padding:18px!important}}
+
+
+/* Responsive global — Carola Menudeo: mobile first sin alterar escritorio */
+html{overflow-x:hidden}
+body,.app-shell,.app-body{min-width:0;max-width:100%}
+.app-body{width:100%}
+.app-body :where(section,article,div,form){min-width:0}
+.app-body :where(input,select,textarea){max-width:100%}
+.app-body :where(h1,h2,h3,p,strong,small){overflow-wrap:break-word}
+.account-card .account-title{min-width:0}
+.account-card .account-title h2{min-width:0}
+.account-card .account-edit,.account-transfer-button{min-height:44px;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap}
+.account-movements article>div{min-width:0;flex:1}
+.account-movements article>strong{flex-shrink:0;font-variant-numeric:tabular-nums}
+.account-movement-edit{min-width:44px;min-height:44px;flex-shrink:0}
+@media(max-width:760px){
+ .account-cards{grid-template-columns:1fr;gap:14px;margin:22px 0 30px}
+ .account-card{padding:20px;gap:14px;border-radius:21px}
+ .account-card .account-icon{font-size:27px}
+ .account-card .account-title{display:flex;align-items:center;justify-content:space-between;gap:12px}
+ .account-card .account-title h2{font-size:20px}
+ .account-card .account-edit{margin-left:auto;padding:11px 16px;font-size:14px}
+ .account-transfer-button{align-self:stretch;width:100%;margin:0;padding:12px 16px;font-size:15px}
+ .account-card>strong{font-size:clamp(27px,7vw,36px);line-height:1.15}
+ .account-movements article{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;padding:16px 14px}
+ .account-movements article>div strong{font-size:15px;line-height:1.35}
+ .account-movements article>strong{font-size:15px;white-space:nowrap}
+ .account-movement-edit{margin-left:0}
+ .sale-record-actions button{flex:1 1 130px;min-height:44px}
+ .payment-choice>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .payment-choice label{min-width:0}
+ .account-edit-actions button{min-width:0;overflow-wrap:anywhere}
+}
+@media(max-width:480px){
+ .app-body{padding-left:16px;padding-right:16px}
+ .app-header{margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px;gap:8px}
+ .identity{gap:9px;min-width:0}
+ .identity-mark{width:43px;height:43px;flex-shrink:0;border-radius:14px}
+ .identity-name{font-size:21px}
+ .identity-sub{font-size:12px}
+ .logout-button{font-size:12px;min-height:42px;padding:9px 11px;white-space:nowrap}
+ .section-screen h1{font-size:clamp(30px,9vw,40px)}
+ .account-movements article{grid-template-columns:minmax(0,1fr) auto;row-gap:8px}
+ .account-movements article>div{grid-row:1 / span 2}
+ .account-movements article>strong{grid-column:2;grid-row:1;text-align:right}
+ .account-movement-edit{grid-column:2;grid-row:2;justify-self:end}
+ .account-modal-sheet{width:100%;max-width:100%;padding:20px 16px calc(22px + env(safe-area-inset-bottom));border-radius:24px 24px 0 0}
+ .account-edit-actions{flex-wrap:wrap}
+ .account-edit-actions button{flex:1 1 125px;min-height:46px}
+ .sales-entry{padding:16px}
+ .sales-entry-head{flex-wrap:wrap}
+ .sales-entry-head>strong{margin-left:auto}
+ .bottom-nav{width:calc(100% - 16px);padding:7px 5px;gap:2px}
+ .nav-tab{min-width:0;padding:8px 2px}
+ .note-overlay,.account-modal-overlay{max-width:100vw}
+}
+@media(max-width:360px){
+ .account-card .account-title{flex-wrap:wrap}
+ .account-card .account-edit{margin-left:0}
+ .identity-name{font-size:19px}
+ .logout-button{font-size:11px;padding:8px}
+}
