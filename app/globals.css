@@ -274,3 +274,16 @@ body,.app-shell,.app-body{min-width:0;max-width:100%}
  .note-actions button{font-size:14px;padding:13px 8px;min-height:48px}
  .note-preview-row{grid-template-columns:38px minmax(0,1fr) minmax(65px,auto);gap:6px}
 }
+
+
+/* Registro de ventas compacto y desplegable */
+.sales-entry-collapsible{overflow:hidden}
+.sales-entry-collapsible>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;user-select:none}
+.sales-entry-collapsible>summary::-webkit-details-marker{display:none}
+.sales-entry-collapsible .sales-entry-head>div{min-width:0;flex:1}
+.sales-entry-collapsible .sales-entry-head>strong{flex-shrink:0;white-space:nowrap}
+.sales-entry-chevron{flex-shrink:0;font-size:22px;color:#a04c70;transition:transform .2s ease}
+.sales-entry-collapsible[open] .sales-entry-chevron{transform:rotate(180deg)}
+.sales-entry-collapsible .sales-entry-expanded{padding-top:12px}
+.sales-entry-collapsible>summary:focus-visible{outline:2px solid #ad5377;outline-offset:-3px;border-radius:12px}
+@media(max-width:600px){.sales-entry-collapsible>summary{gap:8px}.sales-entry-collapsible .sales-entry-head>strong{font-size:clamp(14px,4vw,18px)}}
