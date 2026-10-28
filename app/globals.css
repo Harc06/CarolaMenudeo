@@ -287,3 +287,59 @@ body,.app-shell,.app-body{min-width:0;max-width:100%}
 .sales-entry-collapsible .sales-entry-expanded{padding-top:12px}
 .sales-entry-collapsible>summary:focus-visible{outline:2px solid #ad5377;outline-offset:-3px;border-radius:12px}
 @media(max-width:600px){.sales-entry-collapsible>summary{gap:8px}.sales-entry-collapsible .sales-entry-head>strong{font-size:clamp(14px,4vw,18px)}}
+
+
+/* Notas de venta y cotizaciones: bottom sheet anclado abajo en todos los dispositivos. */
+.note-overlay{
+  inset:0;
+  width:100%;
+  max-width:100%;
+  padding:0;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  overflow:hidden;
+  overscroll-behavior:contain;
+}
+.note-sheet{
+  width:min(720px,100%);
+  max-width:100%;
+  height:min(94dvh,1000px);
+  max-height:calc(100dvh - env(safe-area-inset-top));
+  margin:0;
+  border-radius:24px 24px 0 0;
+  min-width:0;
+  overflow:hidden;
+}
+.note-sheet-head,.note-footer{position:relative;z-index:2;flex-shrink:0}
+.note-fields,.note-preview{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior-x:none;
+  -webkit-overflow-scrolling:touch;
+}
+.note-fields,.note-preview,.note-line,.note-line-grid,.note-two,
+.note-size-field,.note-choice-options,.note-size-picker,.note-actions,
+.note-total,.note-footer{min-width:0;max-width:100%;box-sizing:border-box}
+.note-fields :where(label,input,select,textarea,button),
+.note-line-grid > *, .note-two > *{
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+}
+.note-fields :where(input,select,textarea){width:100%}
+.note-line-grid,.note-two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.note-fields :where(.note-model-trigger,.note-size-trigger,.note-choice-input){min-width:0;max-width:100%}
+.note-fields :where(.note-model-trigger,.note-size-trigger,.note-choice-input) {
+  overflow-wrap:anywhere;
+}
+@media(max-width:600px){
+  .note-overlay{padding:0}
+  .note-sheet{width:100%;height:min(94dvh,1000px);border-radius:24px 24px 0 0}
+  .note-line-grid,.note-two{grid-template-columns:minmax(0,1fr)}
+  .note-fields,.note-preview{padding-inline:16px}
+  .note-line{padding:14px}
+  .note-footer{padding-inline:16px}
+}
