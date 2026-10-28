@@ -1,5 +1,6 @@
 'use client';
 import StyledSelect from './components/StyledSelect';
+import Purchases from './components/Purchases';
 import { useCallback, useEffect, useState } from 'react';
 import { getSupabaseClient } from '../lib/supabase/client';
 import { getAdminToken, saveAdminToken, clearAdminToken } from '../lib/admin-session';
@@ -97,7 +98,7 @@ export default function Home(){
      <div className="shortcut-strip" aria-label="Accesos rápidos">{shortcuts.map(x=><button type="button" key={x.name} className="shortcut-card" onClick={()=>{setExtra(x.name);window.scrollTo({top:0,behavior:'smooth'})}}><span className="shortcut-emoji" aria-hidden="true">{x.symbol}</span><span>{x.name}</span></button>)}</div>
      <div className="scroll-hint">Desliza para ver más <span>→</span></div>
      <section className="insights"><h2>Cuentas</h2><p>Dinero registrado en tus cuentas</p><div className="insight-grid"><div><span>Efectivo</span><strong>{money(Number(accounts.find(x=>x.cuenta==='efectivo')?.saldo||0))}</strong></div><div><span>Banco</span><strong>{money(Number(accounts.find(x=>x.cuenta==='bbva')?.saldo||0))}</strong></div></div><button onClick={()=>{setExtra('Cuentas');window.scrollTo({top:0,behavior:'smooth'})}}>Ver todo →</button></section>
-   </section>:<section className="section-screen" key={extra||tab}>
+   </section>:tab==='compras'&&!extra?<Purchases/>:<section className="section-screen" key={extra||tab}>
       <div className="eyebrow">CAROLA MENUDEO</div><h1>{saleFlow||extra||active.label}</h1>
       <div className="section-placeholder"><div className="placeholder-icon"><TabIcon id={tab}/></div><h2>{saleFlow||`Apartado de ${(extra||active.label).toLowerCase()}`}</h2><p>{saleFlow?'La opción ya está preparada. Aquí configuraremos el formulario y los datos de esta operación.':`Este espacio ya está creado. Aquí agregaremos las funciones que definamos para ${(extra||active.label).toLowerCase()}.`}</p><span className="pending-label">Pendiente de configurar</span></div>
    </section>}
