@@ -346,3 +346,24 @@ body,.app-shell,.app-body{min-width:0;max-width:100%}
 
 /* Compras menudeo */
 .purchase-screen{min-width:0}.purchase-list{display:grid;gap:14px;margin-top:22px}.purchase-card{background:#fff;border:1px solid #eadce2;border-radius:18px;padding:18px;min-width:0}.purchase-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.purchase-card p{margin:10px 0}.purchase-debt{color:#bb314c;font-weight:800}.purchase-paid{color:#16845d;font-weight:700}.purchase-buttons{display:flex;flex-wrap:wrap;gap:9px}.purchase-buttons button{padding:10px 14px;border-radius:10px;border:1px solid #e7d8df;background:#fff5f8;color:#a7486d;font-weight:700}.purchase-sheet{max-width:720px}.purchase-fields{display:flex;flex-direction:column;gap:15px}.purchase-fields label{display:grid;gap:7px;font-weight:700;font-size:14px;min-width:0}.purchase-fields input,.purchase-fields select{min-height:48px;border:1px solid #d9e1e5;border-radius:11px;padding:10px;width:100%;min-width:0;background:white}.purchase-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.purchase-sheet .note-footer .sale-action{width:100%}@media(max-width:430px){.purchase-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Inicio premium: profundidad suave, cristales y relieve sin sacrificar legibilidad. */
+.home-screen{background:radial-gradient(ellipse at 85% 0%,#fce7ef 0%,transparent 42%),radial-gradient(ellipse at 5% 35%,#f5e9ff 0%,transparent 48%);border-radius:28px}
+.today-card{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(145deg,#fff 0%,#fff8fb 48%,#fff 100%);border:1px solid #fff;box-shadow:0 24px 48px -28px #77304b55,0 7px 18px #8d52601c,inset 0 2px 2px #fff;border-radius:30px}
+.today-card:before{content:"";position:absolute;z-index:-1;top:-125px;right:-110px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,#f7cbdc77,transparent 70%);pointer-events:none}
+.today-card h2{font-weight:800;letter-spacing:-.6px}
+.today-top{align-items:center}.today-amount{font-weight:850;letter-spacing:-1.5px;text-shadow:0 2px 0 #fff}
+.today-compare span{background:linear-gradient(145deg,#ecfff7,#dff5ec);box-shadow:inset 1px 1px 2px #fff,0 4px 9px #187c5420;border:1px solid #d9f0e4}
+.today-bottom{gap:12px;border-top:1px solid #eddde3}
+.today-bottom>div{min-width:0;flex:1;padding:16px 10px;border-radius:19px;background:linear-gradient(145deg,#ffffff,#f5faf7);border:1px solid #fff;box-shadow:6px 7px 16px #7b445015,inset -2px -2px 5px #dfede777,inset 2px 2px 4px #fff}
+.today-bottom>.expense{background:linear-gradient(145deg,#fff,#fff2f2);box-shadow:6px 7px 16px #7b445015,inset -2px -2px 5px #f4dcdc77,inset 2px 2px 4px #fff}
+.today-bottom strong{font-weight:850;font-size:clamp(20px,5vw,27px);letter-spacing:-.6px;overflow-wrap:anywhere}
+.today-card .sale-action{background:linear-gradient(135deg,#364451,#192532 70%);border:1px solid #5a6470;box-shadow:0 9px 0 #111b25,0 17px 22px #18253633,inset 0 1px 1px #ffffff55;transition:transform .16s,box-shadow .16s}
+.today-card .sale-action:active{transform:translateY(6px);box-shadow:0 3px 0 #111b25,0 7px 12px #18253633}
+.shortcut-card{background:linear-gradient(145deg,#fff7df,#ffe6a4);border:1px solid #fff2c8;box-shadow:0 9px 0 #e8cb86,0 16px 20px #795a2022,inset 2px 2px 2px #fff9e8;border-radius:23px;transition:transform .16s,box-shadow .16s}
+.shortcut-card:active{transform:translateY(5px);box-shadow:0 4px 0 #e8cb86,0 8px 12px #795a2022}
+.shortcut-emoji{filter:drop-shadow(0 6px 4px #624c2b35);transform:translateY(-2px)}
+.insights{background:linear-gradient(145deg,#fff,#fff8fb);box-shadow:0 18px 32px -22px #74394a66,inset 0 2px 2px #fff;border:1px solid #fff}
+.insight-grid>div{background:linear-gradient(145deg,#fff,#f9f2f6);box-shadow:4px 6px 14px #74394a14,inset 1px 1px 2px #fff;border-radius:15px}
+@media(max-width:390px){.today-card{padding:19px}.today-bottom>div{padding:13px 8px}.today-compare{gap:4px}.today-compare span{padding:7px}}
+@media(prefers-reduced-motion:reduce){.today-card .sale-action,.shortcut-card{transition:none}}
