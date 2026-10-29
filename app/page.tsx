@@ -45,6 +45,7 @@ export default function Home(){
  const reloadQuotes=useCallback(async()=>{const token=getAdminToken();if(!token)return;const {data,error}=await getSupabaseClient().rpc('menudeo_pin_quotes',{p_token:token,p_action:'list'});if(error){setQuotesError(error.message);return;}setQuotesError('');setQuotes((data||[]) as QuoteRecord[]);},[]);
  const deleteQuote=async(id:string)=>{if(quoteBusy||!window.confirm('¿Eliminar esta cotización? No afectará inventario ni cuentas.'))return;setQuoteBusy(true);const {error}=await getSupabaseClient().rpc('menudeo_pin_quotes',{p_token:getAdminToken(),p_action:'delete',p_id:id});setQuoteBusy(false);if(error){setQuotesError(error.message);return;}await reloadQuotes();};
  const [sales,setSales]=useState<SaleRecord[]>([]);
+ const [movements,setMovements]=useState<{id:number;fecha:string;cuenta:string;monto:number;concepto:string}[]>([]);
  const [dashboardLoading,setDashboardLoading]=useState(true);
  const [dashboardError,setDashboardError]=useState('');
  const [dashboardUpdated,setDashboardUpdated]=useState<Date|null>(null);
@@ -92,7 +93,7 @@ export default function Home(){
   setDashboardLoading(false);
  },[]);
  const [accounts,setAccounts]=useState<{cuenta:string;saldo:number}[]>([]);
- const [movements,setMovements]=useState<{id:number;fecha:string;cuenta:string;monto:number;concepto:string}[]>([]);
+
  const [accountsError,setAccountsError]=useState('');
  const [editingAccount,setEditingAccount]=useState<'efectivo'|'bbva'|null>(null);
  const [newBalance,setNewBalance]=useState('');
