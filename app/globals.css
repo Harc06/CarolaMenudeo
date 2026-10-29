@@ -367,3 +367,18 @@ body,.app-shell,.app-body{min-width:0;max-width:100%}
 .insight-grid>div{background:linear-gradient(145deg,#fff,#f9f2f6);box-shadow:4px 6px 14px #74394a14,inset 1px 1px 2px #fff;border-radius:15px}
 @media(max-width:390px){.today-card{padding:19px}.today-bottom>div{padding:13px 8px}.today-compare{gap:4px}.today-compare span{padding:7px}}
 @media(prefers-reduced-motion:reduce){.today-card .sale-action,.shortcut-card{transition:none}}
+
+/* Selector premium de proveedores en el bottom sheet de compras */
+.purchase-supplier-field{position:relative;display:flex;flex-direction:column;gap:9px;min-width:0}
+.purchase-supplier-field>label{font-weight:750;color:#465663}
+.purchase-supplier-combo{display:flex;align-items:center;overflow:hidden;background:linear-gradient(150deg,#fff,#fff9fc);border:1px solid #e8d9e0;border-radius:17px;box-shadow:0 5px 13px #4f2a3812,inset 0 1px 1px #fff}
+.purchase-supplier-combo:focus-within{border-color:#bc6b91;box-shadow:0 0 0 3px #d78eac30,0 7px 16px #4f2a381b}
+.purchase-supplier-combo input{flex:1;min-width:0;width:100%;border:0!important;outline:none!important;box-shadow:none!important;background:transparent!important;padding:15px 12px!important;font-size:15px}
+.purchase-supplier-toggle{flex:none;border:0;background:#f7e7ee;color:#a3446f;border-radius:12px;margin-right:7px;min-width:39px;min-height:39px;font-size:26px;line-height:1}
+.purchase-supplier-menu{position:relative;z-index:12;max-height:225px;overflow-y:auto;overscroll-behavior:contain;background:#fff;border:1px solid #ecdbe3;border-radius:18px;padding:6px;box-shadow:0 12px 28px #4f2a3824}
+.purchase-supplier-menu button{width:100%;display:flex;align-items:center;gap:11px;text-align:left;background:transparent;border:0;border-radius:12px;padding:10px 11px;color:#25333d;font-weight:650;font-size:15px;min-height:48px}
+.purchase-supplier-menu button:active,.purchase-supplier-menu button[aria-selected=true]{background:#fff0f6}
+.purchase-supplier-avatar{display:grid;place-items:center;width:32px;height:32px;flex:none;border-radius:11px;background:linear-gradient(145deg,#f9e3ed,#eec5d6);color:#9c3c66;font-weight:800}
+.purchase-supplier-check{margin-left:auto;color:#23996d}
+.purchase-supplier-menu .purchase-supplier-new{color:#a3446f;border-top:1px solid #f2e6eb;border-radius:0;margin-top:4px}
+.purchase-supplier-menu p{padding:10px;color:#697781;font-size:13px}
