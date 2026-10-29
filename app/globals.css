@@ -382,3 +382,12 @@ body,.app-shell,.app-body{min-width:0;max-width:100%}
 .purchase-supplier-check{margin-left:auto;color:#23996d}
 .purchase-supplier-menu .purchase-supplier-new{color:#a3446f;border-top:1px solid #f2e6eb;border-radius:0;margin-top:4px}
 .purchase-supplier-menu p{padding:10px;color:#697781;font-size:13px}
+
+/* Selector nativo iOS: evita que las opciones se amontonen en el bottom sheet */
+.purchase-fields .purchase-supplier-field{display:flex;flex-direction:column;gap:9px;width:100%;min-width:0}
+.purchase-fields .purchase-supplier-field>label{display:block;font-size:14px;font-weight:750;color:#465663}
+.purchase-supplier-select-wrap{display:flex;align-items:center;gap:10px;width:100%;min-height:54px;padding:0 13px;background:linear-gradient(145deg,#fff,#fff8fb);border:1px solid #e5d5dd;border-radius:16px;box-shadow:0 6px 15px #6d3d5012}
+.purchase-fields .purchase-supplier-select-wrap select{appearance:none;-webkit-appearance:none;flex:1;width:100%;min-width:0;border:0;background:transparent;box-shadow:none;outline:0;padding:12px 0;color:#293541;font-size:15px;font-weight:650}
+.purchase-supplier-chevron{color:#a34e73;font-size:23px;pointer-events:none}
+.purchase-supplier-select-wrap:focus-within{border-color:#b75d85;box-shadow:0 0 0 3px #d78eac33}
+.purchase-fields .purchase-supplier-field>input{border-radius:14px;border:1px solid #dfcbd5;background:white}
