@@ -9,13 +9,14 @@ const categories=['Bota','Botín','Zapatilla','Mocasín','Flat','Sandalia','Huar
 export default function Purchases({quickCreate=false,onClose,onSaved}:{quickCreate?:boolean;onClose?:()=>void;onSaved?:()=>void}={}){
  const [items,setItems]=useState<Item[]>([]),[purchases,setPurchases]=useState<Purchase[]>([]),[open,setOpen]=useState(quickCreate),[busy,setBusy]=useState(false),[error,setError]=useState('');
  const [newSupplier,setNewSupplier]=useState(false);
+ const [supplierDirectory,setSupplierDirectory]=useState<string[]>([]);
  const [form,setForm]=useState({proveedor:'',modelo:'',color:'',categoria:'',precio_compra:'',precio_venta:'',talla_3:'0',talla_4:'0',talla_5:'0',talla_6:'0',metodo:'Deuda'});
  const [detail,setDetail]=useState<Purchase|null>(null),[editCost,setEditCost]=useState(''),[editSizes,setEditSizes]=useState(['0','0','0','0']);
  const [payment,setPayment]=useState<{id:number;balance:number;mode:'pay'|'edit';cost:number}|null>(null),[amount,setAmount]=useState(''),[payMethod,setPayMethod]=useState('Efectivo');
  const set=(key:keyof typeof form,value:string)=>setForm(f=>({...f,[key]:value}));
- const load=async()=>{const token=getAdminToken();if(!token)return;const [a,b]=await Promise.all([getSupabaseClient().rpc('menudeo_pin_list_models',{p_token:token}),getSupabaseClient().rpc('menudeo_purchase_action',{p_token:token,p_action:'list'})]);if(a.error||b.error){setError(a.error?.message||b.error?.message||'Error al cargar');return;}setItems((a.data||[]) as Item[]);setPurchases((b.data||[]) as Purchase[]);};
+ const load=async()=>{const token=getAdminToken();if(!token)return;const [a,b,c]=await Promise.all([getSupabaseClient().rpc('menudeo_pin_list_models',{p_token:token}),getSupabaseClient().rpc('menudeo_purchase_action',{p_token:token,p_action:'list'}),getSupabaseClient().rpc('menudeo_pin_list_proveedores',{p_token:token})]);if(a.error||b.error){setError(a.error?.message||b.error?.message||'Error al cargar');return;}setItems((a.data||[]) as Item[]);if(!c.error)setSupplierDirectory(((c.data||[]) as {nombre:string;activo:boolean}[]).filter(x=>x.activo).map(x=>x.nombre));setPurchases((b.data||[]) as Purchase[]);};
  useEffect(()=>{void load()},[]);
- const suppliers=useMemo(()=>[...new Set(items.map(i=>i.proveedor).filter((v):v is string=>!!v))].sort(),[items]);
+ const suppliers=useMemo(()=>[...new Set([...supplierDirectory,...items.map(i=>i.proveedor).filter((v):v is string=>!!v)])].sort((a,b)=>a.localeCompare(b,'es')),[items,supplierDirectory]);
  const models=useMemo(()=>[...new Set(items.filter(i=>i.proveedor===form.proveedor).map(i=>i.modelo))].sort(),[items,form.proveedor]);
  const variants=items.filter(i=>i.proveedor===form.proveedor&&i.modelo===form.modelo);
  const variant=variants.find(i=>i.color===form.color);
