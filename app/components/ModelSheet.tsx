@@ -9,11 +9,11 @@ const categories=['Bota','Botín','Zapatilla','Mocasín','Flat','Sandalia','Huar
 const sizes=[3,4,5,6] as const;
 type Draft={id:number|null;modelo:string;color:string;categoria:string;proveedor:string;precio_compra:string;precio_venta:string;talla_3:string;talla_4:string;talla_5:string;talla_6:string};
 const toDraft=(v:CatalogVariant):Draft=>({id:v.id,modelo:v.modelo,color:v.color,categoria:v.categoria,proveedor:v.proveedor||'',precio_compra:String(v.precio_compra),precio_venta:String(v.precio_venta),talla_3:String(v.talla_3),talla_4:String(v.talla_4),talla_5:String(v.talla_5),talla_6:String(v.talla_6)});
-const blank=(modelo:string,categoria:string):Draft=>({id:null,modelo,color:'',categoria,proveedor:'',precio_compra:'',precio_venta:'',talla_3:'0',talla_4:'0',talla_5:'0',talla_6:'0'});
+const blank=(modelo:string,source?:CatalogVariant):Draft=>({id:null,modelo,color:'',categoria:source?.categoria||'',proveedor:source?.proveedor||'',precio_compra:source?String(source.precio_compra):'',precio_venta:source?String(source.precio_venta):'',talla_3:'0',talla_4:'0',talla_5:'0',talla_6:'0'});
 export default function ModelSheet({name,variants,token,onClose,onSaved}:{name:string;variants:CatalogVariant[];token:string;onClose:()=>void;onSaved:()=>Promise<void>}){
  const [view,setView]=useState<'detail'|'edit'|'add'>('detail');
  const [drafts,setDrafts]=useState<Draft[]>(variants.map(toDraft));
- const [extra,setExtra]=useState<Draft>(blank(name,variants[0]?.categoria||''));
+ const [extra,setExtra]=useState<Draft>(blank(name,variants[0]));
  const [busy,setBusy]=useState(false),[error,setError]=useState('');
  const [removedIds,setRemovedIds]=useState<number[]>([]);
  const total=drafts.reduce((a,v)=>a+sizes.reduce((b,n)=>b+Number(v[`talla_${n}`]||0),0),0);
