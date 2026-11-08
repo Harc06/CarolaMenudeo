@@ -455,6 +455,8 @@ h1,h2,h3{color:var(--ink);letter-spacing:-.02em}
 .purchase-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 .purchase-grid>label{min-width:0}
 .purchase-sheet .note-footer .sale-action{width:100%}
+.sale-action-secondary{margin-top:10px;background:var(--chip);color:var(--ink)}
+.sale-action-secondary:hover{background:var(--line)}
 
 /* Selector de proveedor */
 .purchase-supplier-field{position:relative;display:flex;flex-direction:column;gap:8px;min-width:0}
