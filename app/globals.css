@@ -231,6 +231,11 @@ h1,h2,h3{color:var(--ink);letter-spacing:-.02em}
 .payment-choice label{display:flex;flex:1;min-width:120px;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-weight:700;cursor:pointer}
 .payment-choice label:has(input:checked){background:var(--dark);border-color:var(--dark);color:var(--surface)}
 .payment-choice input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+fieldset.payment-choice>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+fieldset.payment-choice label{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:6px;padding:12px 8px;min-width:0;font-size:14px}
+fieldset.payment-choice label:has(input:disabled){opacity:.5;cursor:not-allowed}
+.payment-choice label input[type=radio]{flex:0 0 16px;width:16px;height:16px;min-height:0;padding:0;margin:0;border:0}
+.payment-choice label{min-width:0}
 .debt-fields{display:grid;gap:12px;margin-top:14px}
 
 /* ---------- Hojas compartidas (proveedores, catálogo, PIN) ---------- */
@@ -501,7 +506,6 @@ body,.app-shell,.app-body{min-width:0;max-width:100%}
   .account-card{padding:20px}
   .account-movements article{padding:14px 14px}
   .sale-record-actions button{flex:1 1 120px;min-height:44px}
-  .payment-choice>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
   .payment-choice label{min-width:0}
 }
 @media(max-width:600px){
