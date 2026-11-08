@@ -1,7 +1,7 @@
 -- Carola Menudeo: permite editar gastos.
 -- Sin abonos: se pueden cambiar concepto, monto y modo de pago. El cargo anterior
 -- se devuelve a su cuenta y el nuevo se aplica con validación de saldo.
--- Con abonos: sólo se puede cambiar el concepto (los abonos ya son pagos reales).
+-- Con abonos: se pueden cambiar concepto y monto (no por debajo de lo abonado); el modo de pago queda fijo.
 create or replace function public.menudeo_gasto_action(p_token text, p_action text, p_data jsonb default '{}'::jsonb)
 returns jsonb
 language plpgsql
@@ -61,10 +61,15 @@ begin
     select count(*) into v_nabonos from public.menudeo_gasto_abonos where gasto_id=v_id;
 
     if v_nabonos>0 then
-      if v_metodo<>v_gasto.metodo or v_total<>v_gasto.total then
-        raise exception 'Este gasto ya tiene abonos: sólo se puede cambiar el concepto';
+      -- Con abonos: el modo de pago queda fijo, pero el monto sí puede cambiar
+      -- (el saldo pendiente se recalcula como total - pagado).
+      if v_metodo<>v_gasto.metodo then
+        raise exception 'Este gasto ya tiene abonos: no se puede cambiar el modo de pago';
       end if;
-      update public.menudeo_gastos set concepto=v_concepto where id=v_id;
+      if v_total<v_gasto.pagado then
+        raise exception 'El nuevo monto no puede ser menor a lo ya abonado: %', v_gasto.pagado;
+      end if;
+      update public.menudeo_gastos set concepto=v_concepto,total=v_total where id=v_id;
     else
       -- 1) devolver el cargo anterior a su cuenta, si lo hubo
       if v_gasto.metodo<>'Deuda' then
