@@ -589,3 +589,12 @@ body,.app-shell,.app-body{min-width:0;max-width:100%}
 @media(prefers-reduced-motion:reduce){
   .sale-action,.shortcut-card,.carola-select-chevron,.sales-entry-chevron{transition:none}
 }
+
+/* Fotos de modelos (alta y edición de Menudeo) */
+.photo-field{display:grid;gap:8px;margin:0 0 22px}
+.photo-label{font-size:15px;font-weight:800}
+.photo-button{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:11px 18px;border:1px dashed var(--accent);border-radius:999px;background:transparent;color:var(--accent-ink);font-weight:800;cursor:pointer;width:fit-content}
+.photo-button:hover{background:var(--accent-soft)}
+.photo-button input{display:none}
+.photo-button-small{min-height:36px;padding:8px 14px;margin-top:12px;font-size:13px}
+.photo-count{font-size:13px;color:var(--muted)}
